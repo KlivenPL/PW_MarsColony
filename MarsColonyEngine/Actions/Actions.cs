@@ -22,7 +22,7 @@ namespace MarsColonyEngine.Actions {
                     procedure = e.Value,
                     procedureAttribute = e.Value.GetCustomAttribute<ActionProcedureAttribute>()
                 });
-                }
+            }
             );
 
             GetRequirements();
@@ -64,11 +64,11 @@ namespace MarsColonyEngine.Actions {
                 }
             }
             var parameters = storedAction.procedure.GetParameters();
-            if (args == null && parameters.Length > 1 || parameters.Length-1 != args.Length) {
+            if (args == null && parameters.Length > 1 || parameters.Length - 1 != args.Length) {
                 throw new Exception("This action requires parameters of type: " + string.Join(", ", parameters.Select(p => $"{p.Name}: {p.ParameterType.Name}").ToArray()));
             }
-            for (int i = 0; i < parameters.Length-1; i++) {
-                if (parameters[i+1].ParameterType != args[i].GetType())
+            for (int i = 0; i < parameters.Length - 1; i++) {
+                if (parameters[i + 1].ParameterType != args[i].GetType())
                     throw new Exception("This action requires parameters of type: " + string.Join(", ", parameters.Select(p => $"{p.Name}: {p.ParameterType.Name}").ToArray()));
             }
 
@@ -93,7 +93,7 @@ namespace MarsColonyEngine.Actions {
             return true;
         }
 
-        public static AvailableActions[] GetAvailableActions(IActionHandler handler) {
+        public static AvailableActions[] GetAvailableActions (IActionHandler handler) {
             string result = "";
             return handler.GetAvailableActions().Where(e => CheckIfRequirementsAreMet(e, handler, ref result)).ToArray();
         }

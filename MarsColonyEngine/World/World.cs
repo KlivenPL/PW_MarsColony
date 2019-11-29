@@ -14,7 +14,7 @@ namespace MarsColonyEngine.World {
         }
 
 
-        [ActionProcedure(AvailableActions.GenerateNewWorld, typeof(World))]
+        [ActionProcedure(AvailableActions.GenerateNewWorld, null)]
         internal static World GenerateNewWorld (ref string res) {
             return new World();
         }
