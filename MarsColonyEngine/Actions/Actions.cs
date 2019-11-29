@@ -72,18 +72,30 @@ namespace MarsColonyEngine.Actions {
                     throw new Exception("This action requires parameters of type: " + string.Join(", ", parameters.Select(p => $"{p.Name}: {p.ParameterType.Name}").ToArray()));
             }
 
-            if (storedAction.requirement != null) {
-                var par = new object[] { result };
-                if ((bool)storedAction.requirement.Invoke(handler, par) == false) {
-                    result = (string)par[0] == result ? "Action cannot be executed in this circumstances." : (string)par[0];
-                    return default;
-                }
-            }
+            if (CheckIfRequirementsAreMet(actionName, handler, ref result) == false)
+                return default;
 
             var mergedArgs = new object[] { result }.Concat(args).ToArray();
             var outcome = (T)storedAction.procedure.Invoke(handler, mergedArgs);
             result = (string)mergedArgs[0] == result ? "Action executed successfully." : (string)mergedArgs[0];
             return outcome;
+        }
+
+        internal static bool CheckIfRequirementsAreMet<T> (AvailableActions actionName, T handler, ref string result) {
+            var storedAction = actions[actionName];
+            if (storedAction.requirement == null)
+                return true;
+            var par = new object[] { result };
+            if ((bool)storedAction.requirement.Invoke(handler, par) == false) {
+                result = (string)par[0] == result ? "Action cannot be executed in this circumstances." : (string)par[0];
+                return false;
+            }
+            return true;
+        }
+
+        public static AvailableActions[] GetAvailableActions(IActionHandler handler) {
+            string result = "";
+            return handler.GetAvailableActions().Where(e => CheckIfRequirementsAreMet(e, handler, ref result)).ToArray();
         }
 
         private class StoredAction {

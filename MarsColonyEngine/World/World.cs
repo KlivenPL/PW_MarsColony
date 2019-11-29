@@ -8,16 +8,21 @@ namespace MarsColonyEngine.World {
         public const int size = 50;
 
         [ActionRequirement(AvailableActions.GenerateNewWorld)]
-        internal static bool SprawdzSwiat (ref string dupa) {
+        internal static bool SprawdzSwiat (ref string res) {
 
-            return true;
+            return false;
         }
 
 
         [ActionProcedure(AvailableActions.GenerateNewWorld, typeof(World))]
-        internal static World GenerateNewWorld (ref string dupa) {
-            //  dupa = "chuj";
+        internal static World GenerateNewWorld (ref string res) {
             return new World();
+        }
+
+        public AvailableActions[] GetAvailableActions () {
+            return new AvailableActions[] {
+                AvailableActions.GenerateNewWorld,
+            };
         }
     }
 }
