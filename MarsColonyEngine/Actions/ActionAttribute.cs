@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace MarsColonyEngine.Actions {
+namespace MarsColonyEngine.ColonyActions {
     [AttributeUsage(AttributeTargets.Method)]
     internal class ActionProcedureAttribute : Attribute {
         private ActionProcedureAttribute () { }
@@ -10,7 +8,7 @@ namespace MarsColonyEngine.Actions {
         internal AvailableActions Name { get; private set; }
         internal ActionProcedureAttribute (AvailableActions name, Type handlerType) {
             HandlerType = handlerType;
-            Name = name; 
+            Name = name;
         }
     }
 
@@ -21,9 +19,5 @@ namespace MarsColonyEngine.Actions {
         internal ActionRequirementAttribute (AvailableActions name) {
             Name = name;
         }
-    }
-
-    public enum AvailableActions {
-        GenerateNewWorld
     }
 }

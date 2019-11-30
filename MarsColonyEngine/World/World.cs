@@ -1,27 +1,22 @@
-﻿using MarsColonyEngine.Actions;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MarsColonyEngine.ColonyActions;
+using MarsColonyEngine.Context;
+using Newtonsoft.Json.Linq;
 
 namespace MarsColonyEngine.World {
-    public class World : IActionHandler {
-        public const int size = 50;
+    public class World : ActionHandlerBase {
+        public const int size = 100;
 
-        [ActionRequirement(AvailableActions.GenerateNewWorld)]
-        internal static bool SprawdzSwiat (ref string res) {
-
-            return false;
+        public override bool IsActive => ColonyContext.IsInitalized;
+        public World GetContext () {
+            return this;
         }
 
-
-        [ActionProcedure(AvailableActions.GenerateNewWorld, null)]
-        internal static World GenerateNewWorld (ref string res) {
-            return new World();
+        public JObject SerializeContext () {
+            return JObject.FromObject(this);
         }
 
-        public AvailableActions[] GetAvailableActions () {
+        public override AvailableActions[] GetAvailableActions () {
             return new AvailableActions[] {
-                AvailableActions.GenerateNewWorld,
             };
         }
     }

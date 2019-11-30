@@ -1,4 +1,7 @@
-﻿using MarsColonyEngine.Actions;
+﻿using MarsColonyEngine.ColonyActions;
+using MarsColonyEngine.Colonizers;
+using MarsColonyEngine.Context;
+using MarsColonyEngine.Logger;
 using MarsColonyEngine.World;
 using System;
 using System.Collections.Generic;
@@ -9,9 +12,16 @@ using System.Threading.Tasks;
 namespace MarsColonyGame {
     class Program {
         static void Main (string[] args) {
-            Actions.RegisterActions();
-            var w = Actions.ExecuteAction<World>(AvailableActions.GenerateNewWorld, null, out string result);
-            Console.WriteLine(result);
+            KLogger.LogQuietMessages = true;
+            ColonyContext.Create();
+            ColonyActions.Initalize();
+            var actions = ColonyActions.GetAvailableActions();
+            KLogger.Log.Message(string.Join(", ", actions));
+           // var w = ColonyActions.ExecuteAction<World>(AvailableActions.GenerateNewWorld, null);
+
+
+            var xd = new Engineer();
+
         }
     }
 }

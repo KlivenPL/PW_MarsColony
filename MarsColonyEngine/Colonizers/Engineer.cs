@@ -1,0 +1,15 @@
+﻿using MarsColonyEngine.ColonyActions;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Linq;
+
+namespace MarsColonyEngine.Colonizers {
+    public class Engineer : Colonizer {
+        public override AvailableActions[] GetAvailableActions () {
+            return base.GetAvailableActions().Concat(new AvailableActions[] {
+                
+            }).ToArray();
+        }
+    }
+}

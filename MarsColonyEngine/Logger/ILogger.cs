@@ -1,0 +1,10 @@
+﻿namespace MarsColonyEngine.Logger {
+    public interface ILogger {
+
+        bool LogQuietMessages { get; }
+        bool LogWhisperMessages { get; }
+        void Message (string message);
+        void Quiet (string message);
+        void Error (string message);
+    }
+}
