@@ -100,7 +100,10 @@ namespace MarsColonyEngine.ColonyActions {
                 return default;
             }
             for (int i = 0; i < parameters.Length - 1; i++) {
-                if (parameters[i + 1].ParameterType != args[i].GetType()) {
+                //var type1 = parameters[i + 1].ParameterType.GetType();
+                //var type2 = args[i].GetType();
+
+                if (parameters[i + 1].ParameterType.GetType() != args[i].GetType()) {
                     KLogger.Log.Error("This action requires parameters of type: " + string.Join(", ", parameters.Select(p => $"{p.Name}: {p.ParameterType.Name}").ToArray()));
                     return default;
                 }
@@ -117,6 +120,10 @@ namespace MarsColonyEngine.ColonyActions {
         }
 
         internal static bool CheckIfRequirementsAreMet<T> (AvailableActions actionName, T handler, ref string result) where T : IActionHandler {
+            if (actions == null) {
+                KLogger.Log.Error("Actions.Initalize() must be called before using Actions.");
+                return default;
+            }
             if (ColonyContext.IsInitalized == false)
                 return false;
             if (handler != null && handler.IsActive == false)
@@ -133,11 +140,19 @@ namespace MarsColonyEngine.ColonyActions {
         }
 
         public static AvailableActions[] GetAvailableActions (IActionHandler handler) {
+            if (actions == null) {
+                KLogger.Log.Error("Actions.Initalize() must be called before using Actions.");
+                return default;
+            }
             string result = "";
             return handler.GetAvailableActions().Where(e => CheckIfRequirementsAreMet(e, handler, ref result)).ToArray();
         }
 
         public static AvailableActions[] GetAvailableActions () {
+            if (actions == null) {
+                KLogger.Log.Error("Actions.Initalize() must be called before using Actions.");
+                return default;
+            }
             string str = "";
             return Handlers.SelectMany(handler => GetAvailableActions(handler))
                 .Concat(((AvailableActions[])Enum.GetValues(typeof(AvailableActions)))

@@ -22,6 +22,9 @@ namespace MarsColonyEngine.Colonizers {
             if (type == typeof(Explorer))
                 spawnedColonizer = new Explorer();
 
+            if (spawnedColonizer == null)
+                res = "Invalid Colonizer class was given.";
+
             return spawnedColonizer;
         }
     }

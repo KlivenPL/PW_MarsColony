@@ -1,5 +1,6 @@
 ﻿using MarsColonyEngine.Colonizers;
 using MarsColonyEngine.Logger;
+using MarsColonyEngine.Simulation;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace MarsColonyEngine.Context {
         public static ColonyContext Current {
             get {
                 if (_current == null) {
-                    KLogger.Log.Error("Context does not exist. Use Context.Load() or Context.Create() first.");
+                    KLogger.Log.Error("Context does not exist. Use ColonyContext.Load() or ColonyContext.Create() first.");
                     return null;
                 }
                 return _current;
@@ -19,8 +20,10 @@ namespace MarsColonyEngine.Context {
         }
 
         internal Action OnUnload { get; set; }
-        public World.World World { get; internal set; }
-        public List<Colonizer> Colonizers { get; internal set; }
+
+        public Turn Turn { get; internal set; }
+        public World.World World { get; internal set; } = null;
+        public List<Colonizer> Colonizers { get; internal set; } = new List<Colonizer>();
         public static bool IsInitalized {
             get {
                 return _current != null;
@@ -29,7 +32,7 @@ namespace MarsColonyEngine.Context {
 
         public static void Load (FileInfo file) {
             if (_current != null) {
-                KLogger.Log.Error("Cannot load - save is already loaded. Call Context.Current.Unload() first.");
+                KLogger.Log.Error("Cannot load - save is already loaded. Call ColonyContext.Current.Unload() first.");
                 return;
             }
             if (file.Exists) {
@@ -50,7 +53,7 @@ namespace MarsColonyEngine.Context {
 
         public static void Create () {
             _current = new ColonyContext();
-            KLogger.Log.Quiet("Context created successfully.");
+            KLogger.Log.Quiet("ColonyContext created successfully.");
         }
 
         public void Unload () {

@@ -1,4 +1,5 @@
 ﻿using MarsColonyEngine.ColonyActions;
+using MarsColonyEngine.Context;
 using MarsColonyEngine.Misc;
 
 namespace MarsColonyEngine.Colonizers {
@@ -12,6 +13,12 @@ namespace MarsColonyEngine.Colonizers {
         public float Space { get; private set; }
         public float Comfort { get; private set; }
 
+        protected Colonizer () {
+            ColonyContext.Current.Colonizers.Add(this);
+        }
+        ~Colonizer () {
+            ColonyContext.Current.Colonizers.Remove(this);
+        }
 
         public override bool IsActive => HP > 0 && Efficiency > 0;
         public override AvailableActions[] GetAvailableActions () {
