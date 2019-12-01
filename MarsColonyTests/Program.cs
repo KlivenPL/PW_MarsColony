@@ -8,8 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MarsColonyEngine.Simulation;
 
-namespace MarsColonyGame {
+namespace MarsColonyTests {
     class Program {
         static void Main (string[] args) {
 
@@ -18,8 +19,14 @@ namespace MarsColonyGame {
             var actions = ColonyActions.GetAvailableActions();
             var world = ColonyActions.ExecuteAction<World>(AvailableActions.GenerateNewWorld_Static_User, null);
             actions = ColonyActions.GetAvailableActions();
-         //   var world = ColonyActions.ExecuteAction<World>(AvailableActions.SpawnColonizer_Static_Simulation, null);
-            Console.Read();
+            var engineer = ColonyActions.ExecuteAction<Engineer>(AvailableActions.SpawnColonizer_Static_Simulation, null, typeof(Engineer));
+
+            while (true) {
+                KLogger.Log.Message($"Day: {ColonyContext.Current.Turn.Day}, population: {ColonyContext.Current.Turn.TotalColonyStats.Polulation} oxygen: {ColonyContext.Current.Turn.TotalColonyStats.OxygenLevel}");
+                Console.ReadKey();
+                Simulator.Current.NextTurn();
+                ColonyActions.ExecuteAction<Engineer>(AvailableActions.SpawnColonizer_Static_Simulation, null, typeof(Engineer));
+            }
 
             /* KLogger.LogQuietMessages = true;
              ColonyContext.Create();

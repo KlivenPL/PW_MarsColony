@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace MarsColonyEngine.Simulation {
     public partial class Simulator {
         internal Simulator () { }
-        public static Simulator _current;
+        internal static Simulator _current;
         public static Simulator Current {
             get {
                 if (_current == null) {
@@ -30,20 +30,18 @@ namespace MarsColonyEngine.Simulation {
         }
 
         IStats GetTotalStats<T> (out IStats baseStats, out IStats deltaDayStats) where T : IStatsAffector {
-            var statsAffectorType = typeof(T);
-
             baseStats = default;
             deltaDayStats = default;
 
             foreach (var affector in statsAffectors) {
-                if (affector.GetType().IsEquivalentTo(statsAffectorType)) {
+                if (affector is T) {
                     if (deltaDayStats == null) {
                         baseStats = affector.BaseStats;
-                        deltaDayStats = affector.DayDeltaStats;
+                        deltaDayStats = affector.DeltaDayStats;
                         continue;
                     }
                     baseStats = baseStats.Add(affector.BaseStats);
-                    deltaDayStats = deltaDayStats.Add(affector.DayDeltaStats);
+                    deltaDayStats = deltaDayStats.Add(affector.DeltaDayStats);
                 }
             }
             return baseStats.Add(deltaDayStats);
@@ -52,14 +50,14 @@ namespace MarsColonyEngine.Simulation {
 
         public void NextTurn () {
             var currTurn = ColonyContext.Current.Turn;
-            GetTotalStats<ColonyStatsAffector>(out IStats baseStats, out IStats deltaDayStats);
+            GetTotalStats<IColonyStatsAffector>(out IStats baseStats, out IStats deltaDayStats);
             var newTurn = new Turn(
                 currTurn.Day + 1,
                 (ColonyStats)baseStats,
                 currTurn.DeltaDayColonyStats + (ColonyStats)deltaDayStats
             );
             ColonyContext.Current.Turn = newTurn;
-            OnNextTurnStarted();
+            OnNextTurnStarted?.Invoke();
         }
     }
 }

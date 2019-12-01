@@ -1,13 +1,14 @@
 ﻿using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Context;
+using MarsColonyEngine.Technical;
 
 namespace MarsColonyEngine.World {
-    public class World : ActionHandlerBase {
+    public class World : Registrator, IActionHandler {
         public const int size = 100;
 
-        public override bool IsActive => ColonyContext.IsInitalized;
+        public bool IsActive => ColonyContext.IsInitalized;
 
-        public override AvailableActions[] GetAvailableActions () {
+        public AvailableActions[] GetAvailableActions () {
             return new AvailableActions[] {
             };
         }
