@@ -1,46 +1,40 @@
-﻿using MarsColonyEngine.Business.Stats;
+﻿using MarsColonyEngine.Business.Colonizers;
+using MarsColonyEngine.Business.Stats;
 using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Context;
-using MarsColonyEngine.Misc;
 using MarsColonyEngine.Technical;
+using MarsColonyEngine.Technical.Misc;
+using System;
 
 namespace MarsColonyEngine.Colonizers {
-    public abstract class Colonizer : Registrator, IActionHandler, IColonyStatsAffector, IBasicParameters {
-        public int Id { get; private set; }
-        public string Name { get; private set; }
-        public float HP { get; private set; }
-        public float Efficiency { get; private set; }
+    public abstract class Colonizer : Registrator, IActionHandler, IColonyStatsAffector, IDestructable {
+        public ColonizerStats Stats { get; private set; }
 
-        public float Hunger { get; private set; }
-        public float Space { get; private set; }
-        public float Comfort { get; private set; }
-
-        internal ColonyStats BaseColonyStats { get; private set; }
-        internal ColonyStats DayDeltaColonyStats { get; private set; }
-
-        public IStats BaseStats => BaseColonyStats;
-        public IStats DeltaDayStats => DayDeltaColonyStats;
-
-        //ColonyStats IColonyStatsAffector.BaseColonyStats => BaseColonyStats;
-        //ColonyStats IColonyStatsAffector.DayDeltaColonyStats => DayDeltaColonyStats;
-        /*public virtual IStats BaseStats => BaseColonyStats;
-        public virtual IStats DayDeltaStats => DeltaDayColonyStats;*/
+        public ColonyStats BaseColonyStatsAffect { get; private set; }
+        public ColonyStats DeltaDayColonyStatsAffect { get; private set; }
+        public bool IsAlive => Stats.HP > 0;
+        public Action Destroy => () => {
+            Unregister();
+            ColonyContext.Current.Colonizers.Remove(this);
+        };
 
         protected Colonizer () {
+            Register();
             ColonyContext.Current.Colonizers.Add(this);
 
-            BaseColonyStats = new ColonyStats {
-                Polulation = 1
+            BaseColonyStatsAffect = new ColonyStats {
+                Population = 1
             };
-            DayDeltaColonyStats = new ColonyStats {
-                OxygenLevel = -1
+            DeltaDayColonyStatsAffect = new ColonyStats {
+                Oxygen = -1,
+                Food = -1
             };
         }
         ~Colonizer () {
             ColonyContext.Current.Colonizers.Remove(this);
         }
 
-        public virtual bool IsActive => HP > 0 && Efficiency > 0;
+        public virtual bool IsActive => Stats.HP > 0 && Stats.Efficiency > 0;
 
         public virtual AvailableActions[] GetAvailableActions () {
             return new AvailableActions[]{

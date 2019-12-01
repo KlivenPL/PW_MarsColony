@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MarsColonyEngine.Simulation;
+using MarsColonyEngine.Business.Structures;
 
 namespace MarsColonyTests {
     class Program {
@@ -21,8 +22,13 @@ namespace MarsColonyTests {
             actions = ColonyActions.GetAvailableActions();
             var engineer = ColonyActions.ExecuteAction<Engineer>(AvailableActions.SpawnColonizer_Static_Simulation, null, typeof(Engineer));
 
+            var structure = new Structure(StructuresSeeds.AvailableStructures.Where(e => e.Name.ToLower().Contains("shelter")).FirstOrDefault());
+
             while (true) {
-                KLogger.Log.Message($"Day: {ColonyContext.Current.Turn.Day}, population: {ColonyContext.Current.Turn.TotalColonyStats.Polulation} oxygen: {ColonyContext.Current.Turn.TotalColonyStats.OxygenLevel}");
+                KLogger.Log.Message($"Day: {ColonyContext.Current.Turn.Day}" +
+                    $", population: {ColonyContext.Current.Turn.TotalColonyStats.Population}" +
+                    $" oxygen: {ColonyContext.Current.Turn.TotalColonyStats.Oxygen}" +
+                    $" maxPopulation: {ColonyContext.Current.Turn.TotalColonyStats.PopulationLimit}");
                 Console.ReadKey();
                 Simulator.Current.NextTurn();
                 ColonyActions.ExecuteAction<Engineer>(AvailableActions.SpawnColonizer_Static_Simulation, null, typeof(Engineer));

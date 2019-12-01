@@ -1,13 +1,13 @@
-﻿using MarsColonyEngine.Business.Stats;
+﻿using MarsColonyEngine.Business.Simulation;
+using MarsColonyEngine.Business.Stats;
 using MarsColonyEngine.Context;
 using MarsColonyEngine.Logger;
 using System;
-using System.Collections.Generic;
-
 namespace MarsColonyEngine.Simulation {
-    public partial class Simulator {
+    public class Simulator {
         internal Simulator () { }
         internal static Simulator _current;
+        internal AffectorsManager affectorsManager = new AffectorsManager();
         public static Simulator Current {
             get {
                 if (_current == null) {
@@ -20,41 +20,13 @@ namespace MarsColonyEngine.Simulation {
 
         internal Action OnNextTurnStarted { get; set; }
 
-        private List<IStatsAffector> statsAffectors = new List<IStatsAffector>();
-
-        internal void RegisterStatsAffector (IStatsAffector affector) {
-            statsAffectors.Add(affector);
-        }
-        internal void UnregisterStatsAffector (IStatsAffector affector) {
-            statsAffectors.Remove(affector);
-        }
-
-        IStats GetTotalStats<T> (out IStats baseStats, out IStats deltaDayStats) where T : IStatsAffector {
-            baseStats = default;
-            deltaDayStats = default;
-
-            foreach (var affector in statsAffectors) {
-                if (affector is T) {
-                    if (deltaDayStats == null) {
-                        baseStats = affector.BaseStats;
-                        deltaDayStats = affector.DeltaDayStats;
-                        continue;
-                    }
-                    baseStats = baseStats.Add(affector.BaseStats);
-                    deltaDayStats = deltaDayStats.Add(affector.DeltaDayStats);
-                }
-            }
-            return baseStats.Add(deltaDayStats);
-        }
-
-
         public void NextTurn () {
             var currTurn = ColonyContext.Current.Turn;
-            GetTotalStats<IColonyStatsAffector>(out IStats baseStats, out IStats deltaDayStats);
+            affectorsManager.GetTotalColonyStats(out ColonyStats baseStats, out ColonyStats deltaDayStats);
             var newTurn = new Turn(
                 currTurn.Day + 1,
-                (ColonyStats)baseStats,
-                currTurn.DeltaDayColonyStats + (ColonyStats)deltaDayStats
+                baseStats,
+                currTurn.DeltaDayColonyStats + deltaDayStats
             );
             ColonyContext.Current.Turn = newTurn;
             OnNextTurnStarted?.Invoke();

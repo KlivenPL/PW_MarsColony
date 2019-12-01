@@ -2,11 +2,20 @@
 
 namespace MarsColonyEngine.Business.Stats {
     public struct ColonyStats : IStats {
-        public int OxygenLevel { get; set; }
+        public int Oxygen { get; set; }
 
-        public int Polulation { get; set; }
+        public int Population { get; set; }
 
         public int PopulationLimit { get; set; }
+
+        public int Food { get; set; }
+
+        public ColonyStats (int oxygen, int population, int populationLimit, int food) {
+            Oxygen = oxygen;
+            Population = population;
+            PopulationLimit = populationLimit;
+            Food = food;
+        }
 
         public IStats Add (IStats other) {
             if (other.GetType().IsEquivalentTo(typeof(ColonyStats)) == false) {
@@ -15,9 +24,10 @@ namespace MarsColonyEngine.Business.Stats {
             }
             var otherColStats = (ColonyStats)other;
             return new ColonyStats {
-                OxygenLevel = OxygenLevel + otherColStats.OxygenLevel,
-                Polulation = Polulation + otherColStats.Polulation,
+                Oxygen = Oxygen + otherColStats.Oxygen,
+                Population = Population + otherColStats.Population,
                 PopulationLimit = PopulationLimit + otherColStats.PopulationLimit,
+                Food = Food + otherColStats.Food,
             };
         }
         public static ColonyStats operator + (ColonyStats a, ColonyStats b) {

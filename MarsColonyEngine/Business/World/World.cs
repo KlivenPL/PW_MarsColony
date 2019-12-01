@@ -8,6 +8,10 @@ namespace MarsColonyEngine.World {
 
         public bool IsActive => ColonyContext.IsInitalized;
 
+        internal World () {
+            Register();
+        }
+
         public AvailableActions[] GetAvailableActions () {
             return new AvailableActions[] {
             };
