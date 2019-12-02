@@ -7,16 +7,16 @@ namespace MarsColonyEngine.Colonizers {
     public class Engineer : Colonizer {
         public override AvailableActions[] GetAvailableActions () {
             return base.GetAvailableActions().Concat(new AvailableActions[] {
-                AvailableActions.BuildStructureSimpleShelter_Handler_User,
+                AvailableActions.BuildStructureSimpleShelter_Handler_User_Paramless,
             }).ToArray();
         }
 
-        [ActionRequirement(AvailableActions.BuildStructureSimpleShelter_Handler_User)]
+        [ActionRequirement(AvailableActions.BuildStructureSimpleShelter_Handler_User_Paramless)]
         private bool BuildStructureSimpleShelterRequirement (ref string res) {
             return IsAlive && this.Stats.Efficiency >= 25f;
         }
 
-        [ActionProcedure(AvailableActions.BuildStructureSimpleShelter_Handler_User, typeof(Engineer))]
+        [ActionProcedure(AvailableActions.BuildStructureSimpleShelter_Handler_User_Paramless, typeof(Engineer))]
         private Structure BuildStructureSimpleShelterProcedure (ref string res) {
             return new Structure {
                 Name = "SimpleShelter",

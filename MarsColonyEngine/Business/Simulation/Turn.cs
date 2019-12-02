@@ -18,6 +18,8 @@ namespace MarsColonyEngine.Simulation {
         public ColonyStats TotalColonyStats => DeltaDayColonyStats + BaseColonyStats;
 
         public int Day { get; internal set; }
+
+        //public 
         public int AvailableMoves {
             get {
                 return ColonyActions.ColonyActions.GetAvailableActions().Length;

@@ -6,12 +6,12 @@ using System;
 namespace MarsColonyEngine.Colonizers {
     internal class ColonizerActions {
 
-        [ActionRequirement(AvailableActions.SpawnColonizer_Static_Simulation)]
+        [ActionRequirement(AvailableActions.SpawnColonizer_Static_Simulation_Args)]
         private static bool SpawnColonizerRequirement (ref string res) {
             return ColonyContext.Current.World != null;
         }
 
-        [ActionProcedure(AvailableActions.SpawnColonizer_Static_Simulation, null)]
+        [ActionProcedure(AvailableActions.SpawnColonizer_Static_Simulation_Args, null)]
         private static Colonizer SpawnColonizerProcedure (ref string res, Type type) {
             Colonizer spawnedColonizer = null;
             if (type == typeof(Engineer)) {

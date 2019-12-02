@@ -170,6 +170,10 @@ namespace MarsColonyEngine.ColonyActions {
             Handlers.Remove(handler);
         }
 
+        public static IActionHandler[] GetActionHandlers (Predicate<IActionHandler> predicate) {
+            return Handlers.Where(e => predicate(e)).ToArray();
+        }
+
         private class StoredAction {
             public MethodInfo requirement;
             public MethodInfo procedure;
