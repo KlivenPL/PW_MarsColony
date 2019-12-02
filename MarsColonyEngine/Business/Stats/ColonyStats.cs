@@ -2,15 +2,21 @@
 
 namespace MarsColonyEngine.Business.Stats {
     public struct ColonyStats : IStats {
-        public int Oxygen { get; set; }
+        /// <summary>
+        /// KG
+        /// </summary>
+        public float Oxygen { get; set; }
 
         public int Population { get; set; }
 
         public int PopulationLimit { get; set; }
 
+        /// <summary>
+        /// KCal
+        /// </summary>
         public int Food { get; set; }
 
-        public ColonyStats (int oxygen, int population, int populationLimit, int food) {
+        public ColonyStats (float oxygen, int population, int populationLimit, int food) {
             Oxygen = oxygen;
             Population = population;
             PopulationLimit = populationLimit;

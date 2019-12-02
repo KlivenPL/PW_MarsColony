@@ -1,5 +1,6 @@
 ﻿using MarsColonyEngine.Context;
 using MarsColonyEngine.Logger;
+using MarsColonyTests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,7 +72,7 @@ namespace MarsColonyEngine.ColonyActions {
             });
         }
 
-        public static T ExecuteAction<T> (AvailableActions actionName, T handler, params object[] args) where T : IActionHandler {
+        public static object ExecuteAction<T> (AvailableActions actionName, T handler, params object[] args) where T : IActionHandler {
             string result = "Action execution failed.";
             if (actions == null) {
                 KLogger.Log.Error("Actions.Initalize() must be called before using Actions.");
@@ -109,11 +110,13 @@ namespace MarsColonyEngine.ColonyActions {
                 }
             }
 
-            if (CheckIfRequirementsAreMet(actionName, handler, ref result) == false)
+            if (CheckIfRequirementsAreMet(actionName, handler, ref result) == false) {
+                KLogger.Log.Whisper($"Requirements for {actionName.GetDescription()} action are not met.");
                 return default;
+            }
 
             var mergedArgs = new object[] { result }.Concat(args).ToArray();
-            var outcome = (T)storedAction.procedure.Invoke(handler, mergedArgs);
+            var outcome = storedAction.procedure.Invoke(handler, mergedArgs);
             result = (string)mergedArgs[0] == result ? "Action executed successfully." : (string)mergedArgs[0];
             KLogger.Log.Quiet(result);
             return outcome;
@@ -156,7 +159,7 @@ namespace MarsColonyEngine.ColonyActions {
             string str = "";
             return Handlers.SelectMany(handler => GetAvailableActions(handler))
                 .Concat(((AvailableActions[])Enum.GetValues(typeof(AvailableActions)))
-                .Where(actionEnum => CheckIfRequirementsAreMet<IActionHandler>(actionEnum, null, ref str)))
+                .Where(actionEnum => actionEnum.ToString().ToLower().Contains("static") && CheckIfRequirementsAreMet<IActionHandler>(actionEnum, null, ref str)))
                 .Distinct().ToArray();
         }
 

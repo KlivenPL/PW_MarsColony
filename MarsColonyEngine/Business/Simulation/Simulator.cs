@@ -19,17 +19,16 @@ namespace MarsColonyEngine.Simulation {
         }
 
         internal Action OnNextTurnStarted { get; set; }
+        internal Action OnFirstTurnStarted { get; set; }
 
         public void NextTurn () {
             var currTurn = ColonyContext.Current.Turn;
             affectorsManager.GetTotalColonyStats(out ColonyStats baseStats, out ColonyStats deltaDayStats);
-            var newTurn = new Turn(
-                currTurn.Day + 1,
-                baseStats,
-                currTurn.DeltaDayColonyStats + deltaDayStats
-            );
-            ColonyContext.Current.Turn = newTurn;
+            currTurn.PrevDeltaDayColonyStats = currTurn.DeltaDayColonyStats;
+            currTurn.Day++;
             OnNextTurnStarted?.Invoke();
+            OnFirstTurnStarted?.Invoke();
+            OnFirstTurnStarted = null;
         }
     }
 }

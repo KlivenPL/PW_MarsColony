@@ -53,6 +53,7 @@ namespace MarsColonyEngine.Context {
 
         public static void Create () {
             _current = new ColonyContext();
+            _current.Turn = new Turn();
             Simulator._current = new Simulator();
             KLogger.Log.Quiet("ColonyContext created successfully.");
         }
