@@ -46,7 +46,7 @@ namespace MarsColonyTests {
                 IActionHandler chosenHandler = null;
                 if (chosenAction.ToString().ToLower().Contains("handler")) {
                     KLogger.Log.Message("Choose one of the Handlers shown below:");
-                    var availableHandlers = ColonyActions.GetActionHandlers(e => e.GetAvailableActions().Contains(chosenAction));
+                    var availableHandlers = ColonyActions.GetActionHandlers(e => e.GetAvailableActions().Contains(chosenAction)); // todo chyba jednak dziala xd todo to nie bedzie dzialac, GetAvailableActions zwraca wszystkie akcje dla iactionhandlera
                     int j = 0;
                     foreach (var handler in availableHandlers) {
                         KLogger.Log.Message(j++ + ": " + handler.Name + $" ({handler.GetType().Name})");

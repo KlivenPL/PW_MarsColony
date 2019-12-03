@@ -23,7 +23,7 @@ namespace MarsColonyEngine.Colonizers {
 
         public virtual AvailableActions[] GetAvailableActions () {
             return new AvailableActions[]{
-
+                
             };
         }
         public void OnFirstTurnStarted () {
