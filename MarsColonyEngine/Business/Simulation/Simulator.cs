@@ -6,26 +6,31 @@ using System;
 namespace MarsColonyEngine.Simulation {
     public class Simulator {
         internal Simulator () { }
-        internal static Simulator _current;
+        private static Simulator _current;
         internal AffectorsManager affectorsManager = new AffectorsManager();
         public static Simulator Current {
             get {
-                if (_current == null) {
+                if (ColonyContext.Current == null) {
                     KLogger.Log.Error("Simulator cannot be used: ColonyContext does not exist. Use ColonyContext.Load() or ColonyContext.Create() first.");
                     return null;
                 }
-                return _current;
+                return _current ?? (_current = new Simulator());
             }
         }
 
-        internal Action OnNextTurnStarted { get; set; }
-        internal Action OnFirstTurnStarted { get; set; }
+        internal Action OnNextTurnStarted { get; private set; }
+        internal Action OnFirstTurnStarted { get; private set; }
 
+        internal void RegisterIOnNextTurnStartedReciever (Action action) {
+            OnNextTurnStarted += action;
+        }
+        internal void RegisterIOnFirstTurnStartedReciever (Action action) {
+            OnFirstTurnStarted += action;
+        }
         public void NextTurn () {
             var currTurn = ColonyContext.Current.Turn;
             affectorsManager.GetTotalColonyStats(out ColonyStats baseStats, out ColonyStats deltaDayStats);
-            currTurn.PrevDeltaDayColonyStats = currTurn.DeltaDayColonyStats;
-            currTurn.Day++;
+            currTurn.SetNextTurn(currTurn.DeltaDayColonyStats);
             OnNextTurnStarted?.Invoke();
             OnFirstTurnStarted?.Invoke();
             OnFirstTurnStarted = null;

@@ -10,17 +10,21 @@ namespace MarsColonyEngine.Technical {
     public abstract class Registrator : IIdentifiable {
         private static int instanceCounter = 0;
 
+        protected Registrator (string name) {
+            Name = name;
+        }
+
         internal Registrator () {
             if (this is IOnFirstTurnStartedRec) {
-                Simulator.Current.OnFirstTurnStarted += ((IOnFirstTurnStartedRec)this).OnFirstTurnStarted;
+                Simulator.Current.RegisterIOnFirstTurnStartedReciever(((IOnFirstTurnStartedRec)this).OnFirstTurnStarted);
             }
         }
         ~Registrator () {
             Unregister();
         }
 
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int Id { get; protected set; }
+        public string Name { get; protected set; }
 
         protected void Register () {
             Id = instanceCounter++;
@@ -46,7 +50,7 @@ namespace MarsColonyEngine.Technical {
                 Simulator.Current?.affectorsManager.UnregisterColonyStatsAffector((IColonyStatsAffector)this);
             }
             if (this is IOnNextTurnStartedRec) {
-                Simulator.Current.OnNextTurnStarted -= ((IOnNextTurnStartedRec)this).OnNextTurnStarted;
+                Simulator.Current.RegisterIOnNextTurnStartedReciever(((IOnNextTurnStartedRec)this).OnNextTurnStarted);
             }
         }
     }

@@ -5,16 +5,16 @@ namespace MarsColonyEngine.Business.Stats {
         /// <summary>
         /// KG
         /// </summary>
-        public float Oxygen { get; set; }
+        public float Oxygen { get; private set; }
 
-        public int Population { get; set; }
+        public int Population { get; private set; }
 
-        public int PopulationLimit { get; set; }
+        public int PopulationLimit { get; private set; }
 
         /// <summary>
         /// KCal
         /// </summary>
-        public int Food { get; set; }
+        public int Food { get; private set; }
 
         public ColonyStats (float oxygen, int population, int populationLimit, int food) {
             Oxygen = oxygen;

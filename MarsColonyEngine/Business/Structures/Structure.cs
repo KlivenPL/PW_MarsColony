@@ -11,15 +11,15 @@ namespace MarsColonyEngine.Business.Structures {
         public Action Destroy => () => {
             Unregister();
         };
-        public StructureStats Stats { get; internal set; }
+        public StructureStats Stats { get; private set; }
 
-        public ColonizerStats BaseColonizerStatsAffect { get; internal set; }
+        public ColonizerStats BaseColonizerStatsAffect { get; private set; }
 
-        public ColonizerStats DeltaDayColonizerStatsAffect { get; internal set; }
+        public ColonizerStats DeltaDayColonizerStatsAffect { get; private set; }
 
-        public ColonyStats BaseColonyStatsAffect { get; internal set; }
+        public ColonyStats BaseColonyStatsAffect { get; private set; }
 
-        public ColonyStats DeltaDayColonyStatsAffect { get; internal set; }
+        public ColonyStats DeltaDayColonyStatsAffect { get; private set; }
 
         public Structure (Structure pattern) {
             Name = pattern.Name;
@@ -37,9 +37,6 @@ namespace MarsColonyEngine.Business.Structures {
             DeltaDayColonyStatsAffect = deltaDayColonyStatsAffect;
             BaseColonizerStatsAffect = baseColonizerStatsAffect;
             DeltaDayColonizerStatsAffect = deltaDayColonizerStatsAffect;
-        }
-
-        public Structure () {
         }
 
         public void OnFirstTurnStarted () {

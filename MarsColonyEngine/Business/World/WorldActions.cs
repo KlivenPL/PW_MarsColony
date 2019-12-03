@@ -18,7 +18,7 @@ namespace MarsColonyEngine.World {
 
         [ActionRequirement(AvailableActions.NextTurn_Static_User_Paramless)]
         private static bool NextTurnRequirement (ref string res) {
-            return ColonyContext.Current.World != null && Simulation.Simulator._current != null;
+            return ColonyContext.Current.World != null && Simulation.Simulator.Current != null;
         }
 
         [ActionProcedure(AvailableActions.NextTurn_Static_User_Paramless, null)]

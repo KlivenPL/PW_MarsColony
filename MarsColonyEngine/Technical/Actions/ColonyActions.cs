@@ -19,11 +19,11 @@ namespace MarsColonyEngine.ColonyActions {
             RegisterActions();
             GetRequirements();
 
-            ColonyContext.Current.OnUnload += () => {
+            ColonyContext.Current.RegisterOnUnloadReciever(() => {
                 Handlers.Clear();
                 actions?.Clear();
                 actions = null;
-            };
+            });
         }
         private static void RegisterActions () {
             var tmpActions = Assembly.GetExecutingAssembly().GetTypes().SelectMany(e => e.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static)).
