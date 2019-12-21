@@ -17,21 +17,21 @@ namespace MarsColonyEngine.Colonizers {
             if (type == typeof(Engineer)) {
                 spawnedColonizer = new Engineer(
                     baseColonyStatsAffect: new Business.Stats.ColonyStats(0, 1, 0, 0),
-                    deltaDayColonyStatsAffect: new Business.Stats.ColonyStats(-1, 0, 0, (int)(-2000 * KRandom.Float(0.8f, 1.2f))),
+                    deltaDayColonyStatsAffect: default,
                     name: KRandom.Name(),
                     stats: new Business.Colonizers.ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
                 );
             } else if (type == typeof(Scientist)) {
                 spawnedColonizer = new Scientist(
                     baseColonyStatsAffect: new Business.Stats.ColonyStats(0, 1, 0, 0),
-                    deltaDayColonyStatsAffect: new Business.Stats.ColonyStats(-0.78f * KRandom.Float(0.9f, 1.1f), 0, 0, (int)(-2000 * KRandom.Float(0.8f, 1.2f))),
+                    deltaDayColonyStatsAffect: default,
                     name: KRandom.Name(),
                     stats: new Business.Colonizers.ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
                 );
             } else if (type == typeof(Explorer)) {
                 spawnedColonizer = new Explorer(
                     baseColonyStatsAffect: new Business.Stats.ColonyStats(0, 1, 0, 0),
-                    deltaDayColonyStatsAffect: new Business.Stats.ColonyStats(-0.78f * KRandom.Float(0.9f, 1.1f), 0, 0, (int)(-2000 * KRandom.Float(0.8f, 1.2f))),
+                    deltaDayColonyStatsAffect: default,
                     name: KRandom.Name(),
                     stats: new Business.Colonizers.ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
                 );

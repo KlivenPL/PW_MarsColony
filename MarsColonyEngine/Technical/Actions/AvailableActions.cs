@@ -11,6 +11,7 @@ namespace MarsColonyEngine.ColonyActions {
         [Description("Build Simple Shelter structure ( Handler: engineer, args: none )")]
         BuildStructureSimpleShelter_Handler_User_Paramless,
         [Description("Next turn ( Handler: none, args: none )")]
-        NextTurn_Static_User_Paramless
+        NextTurn_Static_User_Paramless,
+        BuildStructureChurch_Handler_User_Paramless
     }
 }

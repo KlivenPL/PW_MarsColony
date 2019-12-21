@@ -1,6 +1,10 @@
 ﻿namespace MarsColonyEngine.Business.Simulation {
-    public interface IOnNextTurnStartedRec {
-        void OnNextTurnStarted ();
+
+    public interface IOnTurnFinishedRec {
+        void OnTurnFinished ();
+    }
+    public interface IOnTurnStartedRec {
+        void OnTurnStarted ();
     }
 
     public interface IOnFirstTurnStartedRec {

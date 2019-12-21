@@ -40,5 +40,9 @@ namespace MarsColonyEngine.Business.Stats {
             var add = a.Add(b);
             return (ColonyStats)add;
         }
+
+        public override string ToString () {
+            return $"Oxygen: {Oxygen} kg\nPopulation: {Population}\nPopulation limit: {PopulationLimit}\nFood: {Food} kcal";
+        }
     }
 }

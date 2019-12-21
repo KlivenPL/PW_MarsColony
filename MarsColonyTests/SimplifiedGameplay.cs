@@ -5,7 +5,6 @@ using MarsColonyEngine.Logger;
 using MarsColonyEngine.World;
 using System;
 using System.Linq;
-using System.Text;
 
 namespace MarsColonyTests {
     class SimplifiedGameplay {
@@ -21,14 +20,36 @@ namespace MarsColonyTests {
             }
         }
 
-        Views currentView = Views.ShowAvailableActions;
+        Views currentView = Views.ChooseMenu;
         void MainGameLoop () {
             switch (currentView) {
+                case Views.ChooseMenu:
+                    ChooseMenu();
+                    break;
                 case Views.ShowAvailableActions:
                     ShowAvailableActions();
+                    currentView = Views.ChooseMenu;
+                    break;
+                case Views.ShowColonyStats:
+                    ShowColonyStats();
+                    currentView = Views.ChooseMenu;
+                    break;
+                case Views.ShowColonizerStats:
+                    ShowColonizerStats();
+                    currentView = Views.ChooseMenu;
                     break;
             }
         }
+
+        void ChooseMenu () {
+            KLogger.Log.Message("Choose menu: ");
+            var menus = (Views[])Enum.GetValues(typeof(Views));
+            menus = menus.Skip(1).ToArray();
+            if (CheckIfChosen(menus, out var chosenMenu, true)) {
+                currentView = chosenMenu;
+            }
+        }
+
         AvailableActions[] availableActions = null;
         void ShowAvailableActions () {
             // StringBuilder sb = new StringBuilder();
@@ -46,7 +67,7 @@ namespace MarsColonyTests {
                 IActionHandler chosenHandler = null;
                 if (chosenAction.ToString().ToLower().Contains("handler")) {
                     KLogger.Log.Message("Choose one of the Handlers shown below:");
-                    var availableHandlers = ColonyActions.GetActionHandlers(e => e.GetAvailableActions().Contains(chosenAction)); // todo chyba jednak dziala xd todo to nie bedzie dzialac, GetAvailableActions zwraca wszystkie akcje dla iactionhandlera
+                    var availableHandlers = ColonyActions.GetActionHandlers(e => e.GetAvailableActions().Contains(chosenAction));
                     int j = 0;
                     foreach (var handler in availableHandlers) {
                         KLogger.Log.Message(j++ + ": " + handler.Name + $" ({handler.GetType().Name})");
@@ -63,8 +84,30 @@ namespace MarsColonyTests {
                 if (ExecuteAction(chosenAction, readArgs, out string result, chosenHandler) == false) {
                     KLogger.Log.Error(result);
                 }
-               // prevRender = "";
+                // prevRender = "";
                 availableActions = null;
+            }
+        }
+
+        void ShowColonyStats () {
+            KLogger.Log.Message("Colony stats:");
+            KLogger.Log.Message(ColonyContext.Current.Turn.TotalColonyStats.ToString());
+        }
+
+        void ShowColonizerStats () {
+            var colonizers = ColonyContext.Current.Colonizers.ToArray();
+            if (colonizers.Length == 0) {
+                KLogger.Log.Message("No colonizers were spawned.");
+                return;
+            }
+            KLogger.Log.Message("Choose one of the Colonizers shown below:");
+            int j = 0;
+            foreach (var handler in colonizers) {
+                KLogger.Log.Message(j++ + ": " + handler.Name + $" ({handler.GetType().Name})");
+            }
+            if (CheckIfChosen(colonizers, out var chosenColonizer)) {
+                KLogger.Log.Message($"Colonizer {chosenColonizer.Name} stats:");
+                KLogger.Log.Message(chosenColonizer.Stats.ToString());
             }
         }
 
@@ -93,7 +136,13 @@ namespace MarsColonyTests {
             return true;
         }
 
-        bool CheckIfChosen<T> (T[] array, out T chosen) {
+        bool CheckIfChosen<T> (T[] array, out T chosen, bool printOptions = false, string[] optionDescriptions = null) {
+            int i = 0;
+            if (printOptions) {
+                foreach (var item in array) {
+                    KLogger.Log.Message(i++ + ": " + (optionDescriptions == null ? item.ToString() : optionDescriptions[i]));
+                }
+            }
             chosen = default;
             var value = Console.ReadLine();
             if (value == null)
@@ -116,7 +165,10 @@ namespace MarsColonyTests {
         }
 
         public enum Views {
-            ShowAvailableActions
+            ChooseMenu,
+            ShowAvailableActions,
+            ShowColonyStats,
+            ShowColonizerStats
         }
     }
 }

@@ -31,5 +31,9 @@ namespace MarsColonyEngine.Business.Colonizers {
                 Comfort = this.Comfort + otherColonizerStats.Comfort,
             };
         }
+
+        public override string ToString () {
+            return $"HP: {HP} pts\nEfficiency: {Efficiency}%\nHunger: {Hunger} kcal\nSpace: {Space}%\nComfort {Comfort}%";
+        }
     }
 }

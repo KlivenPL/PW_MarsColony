@@ -5,6 +5,7 @@ using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Context;
 using MarsColonyEngine.Misc;
 using MarsColonyEngine.Simulation;
+using System;
 
 namespace MarsColonyEngine.Technical {
     public abstract class Registrator : IIdentifiable {
@@ -37,6 +38,12 @@ namespace MarsColonyEngine.Technical {
             if (this is IColonyStatsAffector) {
                 Simulator.Current?.affectorsManager.RegisterColonyStatsAffector((IColonyStatsAffector)this);
             }
+            if (this is IOnTurnStartedRec) {
+                Simulator.Current.RegisterIOnNextTurnStartedReciever(((IOnTurnStartedRec)this).OnTurnStarted);
+            }
+            if (this is IOnTurnFinishedRec) {
+                Simulator.Current.RegisterOnTurnFinishedReviever(((IOnTurnStartedRec)this).OnTurnStarted);
+            }
         }
 
         protected void Unregister () {
@@ -49,8 +56,11 @@ namespace MarsColonyEngine.Technical {
             if (this is IColonyStatsAffector) {
                 Simulator.Current?.affectorsManager.UnregisterColonyStatsAffector((IColonyStatsAffector)this);
             }
-            if (this is IOnNextTurnStartedRec) {
-                Simulator.Current.RegisterIOnNextTurnStartedReciever(((IOnNextTurnStartedRec)this).OnNextTurnStarted);
+            if (this is IOnTurnStartedRec) {
+                throw new NotImplementedException();
+            }
+            if (this is IOnTurnFinishedRec) {
+                throw new NotImplementedException();
             }
         }
     }
