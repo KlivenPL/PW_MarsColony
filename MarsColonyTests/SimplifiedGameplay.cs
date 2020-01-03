@@ -58,7 +58,7 @@ namespace MarsColonyTests {
                 availableActions = ColonyActions.GetAvailableActions();
             }
 
-            int i = 0;
+            int i = 1;
             foreach (Enum action in availableActions) {
                 KLogger.Log.Message($"{i++}: {action.GetDescription()}");
             }
@@ -68,7 +68,7 @@ namespace MarsColonyTests {
                 if (chosenAction.ToString().ToLower().Contains("handler")) {
                     KLogger.Log.Message("Choose one of the Handlers shown below:");
                     var availableHandlers = ColonyActions.GetActionHandlers(e => e.GetAvailableActions().Contains(chosenAction));
-                    int j = 0;
+                    int j = 1;
                     foreach (var handler in availableHandlers) {
                         KLogger.Log.Message(j++ + ": " + handler.Name + $" ({handler.GetType().Name})");
                     }
@@ -101,7 +101,7 @@ namespace MarsColonyTests {
                 return;
             }
             KLogger.Log.Message("Choose one of the Colonizers shown below:");
-            int j = 0;
+            int j = 1;
             foreach (var handler in colonizers) {
                 KLogger.Log.Message(j++ + ": " + handler.Name + $" ({handler.GetType().Name})");
             }
@@ -132,12 +132,15 @@ namespace MarsColonyTests {
                 case AvailableActions.NextTurn_Static_User_Paramless:
                     ColonyActions.ExecuteAction<World>(AvailableActions.NextTurn_Static_User_Paramless, null);
                     break;
+                case AvailableActions.BuildRescueCapsule_Static_User_Paramless:
+                    ColonyActions.ExecuteAction<World>(AvailableActions.BuildRescueCapsule_Static_User_Paramless, null);
+                    break;
             }
             return true;
         }
 
         bool CheckIfChosen<T> (T[] array, out T chosen, bool printOptions = false, string[] optionDescriptions = null) {
-            int i = 0;
+            int i = 1;
             if (printOptions) {
                 foreach (var item in array) {
                     KLogger.Log.Message(i++ + ": " + (optionDescriptions == null ? item.ToString() : optionDescriptions[i]));
@@ -149,6 +152,7 @@ namespace MarsColonyTests {
                 return false;
             if (int.TryParse(value, out int index) == false)
                 return false;
+            index--;
             if (index >= array.Length || index < 0)
                 return false;
             chosen = array[index];

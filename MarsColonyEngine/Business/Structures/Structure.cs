@@ -11,15 +11,15 @@ namespace MarsColonyEngine.Business.Structures {
         public Action Destroy => () => {
             Unregister();
         };
-        public StructureStats Stats { get; private set; }
+        public StructureStats Stats { get; private set; } = new StructureStats();
 
-        public ColonizerStats BaseColonizerStatsAffect { get; private set; }
+        public ColonizerStats BaseColonizerStatsAffect { get; private set; } = new ColonizerStats();
 
-        public ColonizerStats DeltaDayColonizerStatsAffect { get; private set; }
+        public ColonizerStats DeltaDayColonizerStatsAffect { get; private set; } = new ColonizerStats();
 
-        public ColonyStats BaseColonyStatsAffect { get; private set; }
+        public ColonyStats BaseColonyStatsAffect { get; private set; } = new ColonyStats();
 
-        public ColonyStats DeltaDayColonyStatsAffect { get; private set; }
+        public ColonyStats DeltaDayColonyStatsAffect { get; private set; } = new ColonyStats();
 
         public Structure (Structure pattern) {
             Name = pattern.Name;

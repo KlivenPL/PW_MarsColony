@@ -12,6 +12,7 @@ namespace MarsColonyEngine.ColonyActions {
         BuildStructureSimpleShelter_Handler_User_Paramless,
         [Description("Next turn ( Handler: none, args: none )")]
         NextTurn_Static_User_Paramless,
-        BuildStructureChurch_Handler_User_Paramless
+        [Description("Build rescue capsule ( Handler: none, args: none)")]
+        BuildRescueCapsule_Static_User_Paramless,
     }
 }

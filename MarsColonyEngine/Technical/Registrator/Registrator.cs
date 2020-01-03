@@ -1,5 +1,6 @@
 ﻿using MarsColonyEngine.Business.Simulation;
 using MarsColonyEngine.Business.Stats;
+using MarsColonyEngine.Business.Structures;
 using MarsColonyEngine.Colonizers;
 using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Context;
@@ -32,6 +33,9 @@ namespace MarsColonyEngine.Technical {
             if (this is Colonizer) {
                 ColonyContext.Current.Colonizers.Add((Colonizer)this);
             }
+            if (this is Structure) {
+                ColonyContext.Current.Structures.Add((Structure)this);
+            }
             if (this is IActionHandler) {
                 ColonyActions.ColonyActions.RegisterHandler((IActionHandler)this);
             }
@@ -42,13 +46,16 @@ namespace MarsColonyEngine.Technical {
                 Simulator.Current.RegisterIOnNextTurnStartedReciever(((IOnTurnStartedRec)this).OnTurnStarted);
             }
             if (this is IOnTurnFinishedRec) {
-                Simulator.Current.RegisterOnTurnFinishedReviever(((IOnTurnStartedRec)this).OnTurnStarted);
+                Simulator.Current.RegisterOnTurnFinishedReviever(((IOnTurnFinishedRec)this).OnTurnFinished);
             }
         }
 
         protected void Unregister () {
             if (this is Colonizer) {
                 ColonyContext.Current.Colonizers.Remove((Colonizer)this);
+            }
+            if (this is Structure) {
+                ColonyContext.Current.Structures.Remove((Structure)this);
             }
             if (this is IActionHandler) {
                 ColonyActions.ColonyActions.UnregisterHandler((IActionHandler)this);

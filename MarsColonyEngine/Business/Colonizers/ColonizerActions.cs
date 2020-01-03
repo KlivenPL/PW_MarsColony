@@ -1,4 +1,6 @@
-﻿using MarsColonyEngine.ColonyActions;
+﻿using MarsColonyEngine.Business.Colonizers;
+using MarsColonyEngine.Business.Stats;
+using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Context;
 using MarsColonyEngine.Helpers;
 using System;
@@ -8,7 +10,7 @@ namespace MarsColonyEngine.Colonizers {
 
         [ActionRequirement(AvailableActions.SpawnColonizer_Static_Simulation_Args)]
         private static bool SpawnColonizerRequirement (ref string res) {
-            return ColonyContext.Current.World != null;
+            return ColonyContext.Current.World != null && ColonyContext.Current.Turn.TotalColonyStats.PopulationLimit - ColonyContext.Current.Turn.TotalColonyStats.Population > 0;
         }
 
         [ActionProcedure(AvailableActions.SpawnColonizer_Static_Simulation_Args, null)]
@@ -16,24 +18,24 @@ namespace MarsColonyEngine.Colonizers {
             Colonizer spawnedColonizer = null;
             if (type == typeof(Engineer)) {
                 spawnedColonizer = new Engineer(
-                    baseColonyStatsAffect: new Business.Stats.ColonyStats(0, 1, 0, 0),
-                    deltaDayColonyStatsAffect: default,
+                    baseColonyStatsAffect: new ColonyStats(0, 1, 0, 0),
+                    deltaDayColonyStatsAffect: new ColonyStats(), // those are managed on every turn in Colonizer class.
                     name: KRandom.Name(),
-                    stats: new Business.Colonizers.ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
+                    stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
                 );
             } else if (type == typeof(Scientist)) {
                 spawnedColonizer = new Scientist(
-                    baseColonyStatsAffect: new Business.Stats.ColonyStats(0, 1, 0, 0),
-                    deltaDayColonyStatsAffect: default,
+                    baseColonyStatsAffect: new ColonyStats(0, 1, 0, 0),
+                    deltaDayColonyStatsAffect: new ColonyStats(),
                     name: KRandom.Name(),
-                    stats: new Business.Colonizers.ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
+                    stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
                 );
             } else if (type == typeof(Explorer)) {
                 spawnedColonizer = new Explorer(
-                    baseColonyStatsAffect: new Business.Stats.ColonyStats(0, 1, 0, 0),
-                    deltaDayColonyStatsAffect: default,
+                    baseColonyStatsAffect: new ColonyStats(0, 1, 0, 0),
+                    deltaDayColonyStatsAffect: new ColonyStats(),
                     name: KRandom.Name(),
-                    stats: new Business.Colonizers.ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
+                    stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
                 );
             } else
             if (spawnedColonizer == null)

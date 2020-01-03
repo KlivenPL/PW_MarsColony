@@ -1,7 +1,7 @@
 ﻿using MarsColonyEngine.Logger;
 
 namespace MarsColonyEngine.Business.Stats {
-    public struct ColonyStats : IStats {
+    public class ColonyStats : IStats {
         /// <summary>
         /// KG
         /// </summary>
@@ -16,6 +16,7 @@ namespace MarsColonyEngine.Business.Stats {
         /// </summary>
         public int Food { get; private set; }
 
+        public ColonyStats () { }
         public ColonyStats (float oxygen, int population, int populationLimit, int food) {
             Oxygen = oxygen;
             Population = population;
@@ -29,12 +30,18 @@ namespace MarsColonyEngine.Business.Stats {
                 return null;
             }
             var otherColStats = (ColonyStats)other;
-            return new ColonyStats {
-                Oxygen = Oxygen + otherColStats.Oxygen,
-                Population = Population + otherColStats.Population,
-                PopulationLimit = PopulationLimit + otherColStats.PopulationLimit,
-                Food = Food + otherColStats.Food,
-            };
+            return new ColonyStats(
+                oxygen: Oxygen + otherColStats.Oxygen,
+                population: Population + otherColStats.Population,
+                populationLimit: PopulationLimit + otherColStats.PopulationLimit,
+                food: Food + otherColStats.Food
+            );
+        }
+        public void Modify (ColonyStats newValue) {
+            Oxygen = newValue.Oxygen;
+            Population = newValue.Population;
+            PopulationLimit = newValue.PopulationLimit;
+            Food = newValue.Food;
         }
         public static ColonyStats operator + (ColonyStats a, ColonyStats b) {
             var add = a.Add(b);

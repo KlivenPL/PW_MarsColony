@@ -2,7 +2,7 @@
 
 namespace MarsColonyEngine.Simulation {
     public class Turn {
-        public ColonyStats PrevDeltaDayColonyStats { get; private set; }
+        public ColonyStats PrevDeltaDayColonyStats { get; private set; } = new ColonyStats();
         public ColonyStats BaseColonyStats {
             get {
                 Simulator.Current.affectorsManager.GetTotalColonyStats(out ColonyStats baseStats, out ColonyStats deltaDayStats);
@@ -21,6 +21,7 @@ namespace MarsColonyEngine.Simulation {
 
         public void SetNextTurn (ColonyStats prevDeltaDayColonyStats) {
             Day++;
+            PrevDeltaDayColonyStats.Modify(prevDeltaDayColonyStats);
         }
 
         //public 

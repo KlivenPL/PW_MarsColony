@@ -1,4 +1,5 @@
-﻿using MarsColonyEngine.Colonizers;
+﻿using MarsColonyEngine.Business.Structures;
+using MarsColonyEngine.Colonizers;
 using MarsColonyEngine.Logger;
 using MarsColonyEngine.Simulation;
 using Newtonsoft.Json.Linq;
@@ -39,6 +40,7 @@ namespace MarsColonyEngine.Context {
             }
         }
         public List<Colonizer> Colonizers { get; private set; } = new List<Colonizer>();
+        public List<Structure> Structures { get; private set; } = new List<Structure>();
         public static bool IsInitalized {
             get {
                 return _current != null;

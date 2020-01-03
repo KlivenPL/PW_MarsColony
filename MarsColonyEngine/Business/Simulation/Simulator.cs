@@ -32,6 +32,7 @@ namespace MarsColonyEngine.Simulation {
             OnTurnFinished += action;
         }
         public void NextTurn () {
+            OnTurnFinished?.Invoke();
             var currTurn = ColonyContext.Current.Turn;
             affectorsManager.GetTotalColonyStats(out ColonyStats baseStats, out ColonyStats deltaDayStats);
             currTurn.SetNextTurn(currTurn.DeltaDayColonyStats);
