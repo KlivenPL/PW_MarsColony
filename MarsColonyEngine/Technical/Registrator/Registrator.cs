@@ -7,23 +7,24 @@ using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Context;
 using MarsColonyEngine.Misc;
 using MarsColonyEngine.Simulation;
+using System.Linq;
 
 namespace MarsColonyEngine.Technical {
     public abstract class Registrator : IIdentifiable {
         private static int instanceCounter = 0;
 
-        protected Registrator (string name) {
-            Name = name;
-        }
+        //protected Registrator (string name) {
+        //    Name = name;
+        //}
 
         internal Registrator () {
             if (this is IOnFirstTurnStartedRec) {
                 Simulator.Current.RegisterIOnFirstTurnStartedReciever(((IOnFirstTurnStartedRec)this).OnFirstTurnStarted);
             }
         }
-        ~Registrator () {
-            Unregister();
-        }
+        //~Registrator () {
+        //    Unregister();
+        //}
 
         public int Id { get; protected set; }
         public string Name { get; protected set; }
@@ -37,13 +38,17 @@ namespace MarsColonyEngine.Technical {
                 ColonyContext.Current.Structures.Add((Structure)this);
             }
             if (this is Item) {
-                ColonyContext.Current.Items.Add((Item)this);
+                var item = (Item)this;
+                if (ColonyContext.Current.Turn.CountItems(item.ItemEnum) == 0)
+                    ColonyContext.Current.Items.Add(item);
+                else
+                    ColonyContext.Current.Items.Single(e => e.ItemEnum == item.ItemEnum).AffectHp(item.Amount);
             }
             if (this is IActionHandler) {
                 ColonyActions.ColonyActions.RegisterHandler((IActionHandler)this);
             }
             if (this is IColonyStatsAffector) {
-                Simulator.Current?.affectorsManager.RegisterColonyStatsAffector((IColonyStatsAffector)this);
+                Simulator.Current.affectorsManager.RegisterColonyStatsAffector((IColonyStatsAffector)this);
             }
             if (this is IOnTurnStartedRec) {
                 Simulator.Current.RegisterIOnNextTurnStartedReciever(((IOnTurnStartedRec)this).OnTurnStarted);
@@ -67,7 +72,7 @@ namespace MarsColonyEngine.Technical {
                 ColonyActions.ColonyActions.UnregisterHandler((IActionHandler)this);
             }
             if (this is IColonyStatsAffector) {
-                Simulator.Current?.affectorsManager.UnregisterColonyStatsAffector((IColonyStatsAffector)this);
+                Simulator.Current.affectorsManager.UnregisterColonyStatsAffector((IColonyStatsAffector)this);
             }
             if (this is IOnTurnStartedRec) {
                 Simulator.Current.UnregisterIOnNextTurnStartedReciever(((IOnTurnStartedRec)this).OnTurnStarted);

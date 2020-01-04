@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
-namespace MarsColonyTests {
+namespace ExtentionMethods {
 
-    public static class EnumExtensionMethods {
+    public static class ExtensionMethods {
         public static string GetDescription (this Enum GenericEnum) {
             Type genericEnumType = GenericEnum.GetType();
             MemberInfo[] memberInfo = genericEnumType.GetMember(GenericEnum.ToString());
@@ -15,6 +16,18 @@ namespace MarsColonyTests {
                 }
             }
             return GenericEnum.ToString();
+        }
+
+        public static string SplitCamelCase (this string str) {
+            return Regex.Replace(
+                Regex.Replace(
+                    str,
+                    @"(\P{Ll})(\P{Ll}\p{Ll})",
+                    "$1 $2"
+                ),
+                @"(\p{Ll})(\P{Ll})",
+                "$1 $2"
+            );
         }
 
     }

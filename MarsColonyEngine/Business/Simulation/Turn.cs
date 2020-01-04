@@ -33,7 +33,7 @@ namespace MarsColonyEngine.Simulation {
             }
         }
 
-        int CountItems (AvailableItems item) {
+        public int CountItems (AvailableItems item) {
             return ColonyContext.Current.Items.Where(e => e.ItemEnum == item).Sum(e => e.Amount);
         }
 

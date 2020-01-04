@@ -2,7 +2,6 @@
 using MarsColonyEngine.Business.Simulation;
 using MarsColonyEngine.Business.Stats;
 using MarsColonyEngine.ColonyActions;
-using MarsColonyEngine.Context;
 using MarsColonyEngine.Logger;
 using MarsColonyEngine.Technical;
 using MarsColonyEngine.Technical.Misc;
@@ -10,17 +9,20 @@ using System;
 
 namespace MarsColonyEngine.Colonizers {
     public abstract class Colonizer : Registrator, IActionHandler, IColonyStatsAffector, IDestructable, IOnFirstTurnStartedRec, IOnTurnStartedRec, IOnTurnFinishedRec {
-        public ColonizerStats Stats { get; private set; } = new ColonizerStats();
-        public ColonyStats BaseColonyStatsAffect { get; private set; } = new ColonyStats();
-        public ColonyStats DeltaDayColonyStatsAffect { get; private set; } = new ColonyStats();
+        public ColonizerStats Stats { get; protected set; } = new ColonizerStats();
+        public ColonyStats BaseColonyStatsAffect { get; protected set; } = new ColonyStats();
+        public ColonyStats DeltaDayColonyStatsAffect { get; protected set; } = new ColonyStats();
         public bool IsAlive => Stats.HP > 0;
         public void AffectHp (float signeDeltaHp) {
             Stats = (ColonizerStats)Stats.Add(new ColonizerStats(signeDeltaHp + Stats.HP >= 0 ? signeDeltaHp : -Stats.HP, 0, 0, 0, 0));
             KLogger.Log.Message("Colonizer " + Name + "(" + GetType().Name + ") HP affected: " + signeDeltaHp + ", current value: " + Stats.HP);
+            if (IsAlive == false) {
+                Destroy();
+                KLogger.Log.Message("Colonizer " + Name + "(" + GetType().Name + ") has died");
+            }
         }
         public Action Destroy => () => {
             Unregister();
-            ColonyContext.Current.Colonizers.Remove(this);
         };
 
         protected Colonizer (string name, ColonizerStats stats, ColonyStats baseColonyStatsAffect, ColonyStats deltaDayColonyStatsAffect) {
@@ -52,10 +54,7 @@ namespace MarsColonyEngine.Colonizers {
 
         public void OnTurnStarted () {
             DeltaDayColonyStatsAffect = new ColonyStats();
-            if (IsAlive == false) {
-                Destroy();
-                KLogger.Log.Message("Colonizer " + Name + "(" + GetType().Name + ") has died");
-            }
+            Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 100 - Stats.Efficiency, 0, 0, 0)); // restoring efficiency to 100%
         }
     }
 }

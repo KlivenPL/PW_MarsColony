@@ -1,4 +1,6 @@
-﻿using MarsColonyEngine.Business.Colonizers;
+﻿using ExtentionMethods;
+using MarsColonyEngine.Business.Colonizers;
+using MarsColonyEngine.Business.Items;
 using MarsColonyEngine.Business.Simulation;
 using MarsColonyEngine.Business.Stats;
 using MarsColonyEngine.Logger;
@@ -13,6 +15,10 @@ namespace MarsColonyEngine.Business.Structures {
         public void AffectHp (float signeDeltaHp) {
             Stats = (StructureStats)Stats.Add(new StructureStats(signeDeltaHp + Stats.HP >= 0 ? signeDeltaHp : -Stats.HP, 0));
             KLogger.Log.Message("Structure " + Name + " HP affected: " + signeDeltaHp + ", current value: " + Stats.HP);
+            if (IsAlive == false) {
+                Destroy();
+                KLogger.Log.Message("Structure " + Name + " has been destroyed!");
+            }
         }
         public Action Destroy => () => {
             Unregister();
@@ -36,9 +42,9 @@ namespace MarsColonyEngine.Business.Structures {
         //    DeltaDayColonizerStatsAffect = pattern.DeltaDayColonizerStatsAffect;
         //}
 
-        internal Structure (AvailableStructures structureEnum, string name, StructureStats stats, ColonyStats baseColonyStatsAffect, ColonyStats deltaDayColonyStatsAffect, ColonizerStats baseColonizerStatsAffect, ColonizerStats deltaDayColonizerStatsAffect) {
+        internal Structure (AvailableStructures structureEnum, StructureStats stats, ColonyStats baseColonyStatsAffect, ColonyStats deltaDayColonyStatsAffect, ColonizerStats baseColonizerStatsAffect, ColonizerStats deltaDayColonizerStatsAffect) {
             StructureEnum = structureEnum;
-            Name = name;
+            Name = structureEnum.ToString().SplitCamelCase();
             Stats = stats;
             BaseColonyStatsAffect = baseColonyStatsAffect;
             DeltaDayColonyStatsAffect = deltaDayColonyStatsAffect;
@@ -51,9 +57,12 @@ namespace MarsColonyEngine.Business.Structures {
         }
 
         public void OnTurnStarted () {
-            if (IsAlive == false) {
-                Destroy();
-                KLogger.Log.Message("Structure " + Name + " has been destroyed!");
+            switch (StructureEnum) {
+                case AvailableStructures.AluminiumMine:
+                    new Item(AvailableItems.Aluminium, 5);
+                    break;
+                default:
+                    break;
             }
         }
     }

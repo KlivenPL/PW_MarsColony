@@ -1,4 +1,5 @@
-﻿using MarsColonyEngine.Colonizers;
+﻿using ExtentionMethods;
+using MarsColonyEngine.Colonizers;
 using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Context;
 using MarsColonyEngine.Logger;
@@ -13,6 +14,7 @@ namespace MarsColonyTests {
             KLogger.LogWhisperMessages = true;
             ColonyContext.Create();
             ColonyActions.Initalize();
+            ColonyContext.InitNewContext();
             var sg = new SimplifiedGameplay();
 
             while (true) {
@@ -36,6 +38,10 @@ namespace MarsColonyTests {
                     break;
                 case Views.ShowColonizerStats:
                     ShowColonizerStats();
+                    currentView = Views.ChooseMenu;
+                    break;
+                case Views.ListAllItems:
+                    ListAllItems();
                     currentView = Views.ChooseMenu;
                     break;
             }
@@ -111,6 +117,18 @@ namespace MarsColonyTests {
             }
         }
 
+        void ListAllItems () {
+            var items = ColonyContext.Current.Items;
+            if (items.Count == 0) {
+                KLogger.Log.Message("No items available.");
+                return;
+            }
+            int i = 1;
+            foreach (var item in items) {
+                KLogger.Log.Message($"{i}: {item.Name} {item.Amount}x");
+            }
+        }
+
         bool ExecuteAction (AvailableActions action, string args, out string result, IActionHandler handler = null) {
             result = "OK";
             var rawArgs = args.Split(new string[] { ",", "\n", "\r\n", " " }, StringSplitOptions.RemoveEmptyEntries);
@@ -135,6 +153,15 @@ namespace MarsColonyTests {
                 case AvailableActions.BuildRescueCapsule_Static_User_Paramless:
                     ColonyActions.ExecuteAction<World>(AvailableActions.BuildRescueCapsule_Static_User_Paramless, null);
                     break;
+                case AvailableActions.Explore_Handler_User_Paramless:
+                    ColonyActions.ExecuteAction<Explorer>(AvailableActions.Explore_Handler_User_Paramless, (Explorer)handler);
+                    break;
+                case AvailableActions.BuildStructureAluminiumMine_Handler_User_Paramless:
+                    ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildStructureAluminiumMine_Handler_User_Paramless, (Engineer)handler);
+                    break;
+                case AvailableActions.BuildStructurePotatoFarm_Handler_User_Paramless:
+                    ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildStructurePotatoFarm_Handler_User_Paramless, (Engineer)handler);
+                    break;
             }
             return true;
         }
@@ -143,7 +170,7 @@ namespace MarsColonyTests {
             int i = 1;
             if (printOptions) {
                 foreach (var item in array) {
-                    KLogger.Log.Message(i++ + ": " + (optionDescriptions == null ? item.ToString() : optionDescriptions[i]));
+                    KLogger.Log.Message(i++ + ": " + (optionDescriptions == null ? item.ToString().SplitCamelCase() : optionDescriptions[i]));
                 }
             }
             chosen = default;
@@ -172,7 +199,8 @@ namespace MarsColonyTests {
             ChooseMenu,
             ShowAvailableActions,
             ShowColonyStats,
-            ShowColonizerStats
+            ShowColonizerStats,
+            ListAllItems,
         }
     }
 }

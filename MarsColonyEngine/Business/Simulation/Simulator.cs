@@ -48,9 +48,9 @@ namespace MarsColonyEngine.Simulation {
             var currTurn = ColonyContext.Current.Turn;
             affectorsManager.GetTotalColonyStats(out ColonyStats baseStats, out ColonyStats deltaDayStats);
             currTurn.SetNextTurn(currTurn.DeltaDayColonyStats);
-            OnTurnStarted?.Invoke();
             OnFirstTurnStarted?.Invoke();
             OnFirstTurnStarted = null;
+            OnTurnStarted?.Invoke();
         }
 
         private void AffectColonizers () {
@@ -62,6 +62,7 @@ namespace MarsColonyEngine.Simulation {
                 var deltaHunger = totalColonyStats.Food + totalHunger;
                 var hungerDamage = (1 - deltaHunger / totalHunger) * 25;
                 totalDamage += hungerDamage;
+                KLogger.Log.Message("Colonizers are starving!");
             }
 
             if (totalColonyStats.Oxygen < 0) {
@@ -69,16 +70,18 @@ namespace MarsColonyEngine.Simulation {
                 var deltaOxygen = totalColonyStats.Oxygen + totalOxygenUsage;
                 var lackOfOxygenDamage = (1 - deltaOxygen / totalOxygenUsage) * 200;
                 totalDamage += lackOfOxygenDamage;
+                KLogger.Log.Message("Colonizers are suffocating!");
             }
 
-            foreach (IDestructable colonizer in ColonyContext.Current.Colonizers) {
+            foreach (IDestructable colonizer in ColonyContext.Current.Colonizers.ToList()) {
                 colonizer.AffectHp(-totalDamage);
             }
         }
 
         private void AffectStructures () {
+            KLogger.Log.Whisper("Structures take decay damage. You can order an Engineer to fix Structures.");
             const float damagePerTurn = 5f;
-            foreach (IDestructable structure in ColonyContext.Current.Structures) {
+            foreach (IDestructable structure in ColonyContext.Current.Structures.ToList()) {
                 structure.AffectHp(-damagePerTurn);
             }
         }

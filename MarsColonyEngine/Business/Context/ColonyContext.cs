@@ -1,6 +1,7 @@
 ﻿using MarsColonyEngine.Business.Items;
 using MarsColonyEngine.Business.Structures;
 using MarsColonyEngine.Colonizers;
+using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Logger;
 using MarsColonyEngine.Simulation;
 using Newtonsoft.Json.Linq;
@@ -77,6 +78,14 @@ namespace MarsColonyEngine.Context {
                 _current.Turn = new Turn();
                 KLogger.Log.Quiet("ColonyContext created successfully.");
             }
+        }
+
+        public static void InitNewContext () {
+            ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.BuildRescueCapsule_Static_User_Paramless, null);
+            ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.SpawnColonizer_Static_Simulation_Args, null, typeof(Engineer));
+            ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.SpawnColonizer_Static_Simulation_Args, null, typeof(Scientist));
+            ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.SpawnColonizer_Static_Simulation_Args, null, typeof(Explorer));
+            ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.NextTurn_Static_User_Paramless, null);
         }
 
         public void Unload () {

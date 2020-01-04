@@ -14,5 +14,8 @@ namespace MarsColonyEngine.ColonyActions {
         NextTurn_Static_User_Paramless,
         [Description("Build rescue capsule ( Handler: none, args: none)")]
         BuildRescueCapsule_Static_User_Paramless,
+        Explore_Handler_User_Paramless,
+        BuildStructureAluminiumMine_Handler_User_Paramless,
+        BuildStructurePotatoFarm_Handler_User_Paramless,
     }
 }

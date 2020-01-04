@@ -1,13 +1,21 @@
-﻿using MarsColonyEngine.Business.Simulation;
+﻿using ExtentionMethods;
 using MarsColonyEngine.Logger;
 using MarsColonyEngine.Technical;
 using MarsColonyEngine.Technical.Misc;
 using System;
 
 namespace MarsColonyEngine.Business.Items {
-    public class Item : Registrator, IDestructable, IOnFirstTurnStartedRec {
+    public class Item : Registrator, IDestructable {
         public AvailableItems ItemEnum { get; private set; }
         public int Amount { get; private set; }
+
+        public Item (AvailableItems itemEnum, int amount) {
+            ItemEnum = itemEnum;
+            Name = itemEnum.ToString().SplitCamelCase();
+            Amount = amount;
+            Register();
+        }
+        private Item () { }
 
         public bool IsAlive => Amount > 0;
 
@@ -26,13 +34,13 @@ namespace MarsColonyEngine.Business.Items {
             if (IsAlive == false)
                 Destroy();
         }
-
-        public void OnFirstTurnStarted () {
-            Register();
-        }
     }
 
     public enum AvailableItems {
+        Aluminium,
+        UnexaminedSample,
+        AluminiumOreMap,
+        ArmoredBedroomBlueprint,
 
     }
 }
