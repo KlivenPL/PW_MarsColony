@@ -1,4 +1,5 @@
-﻿using MarsColonyEngine.Business.Structures;
+﻿using MarsColonyEngine.Business.Items;
+using MarsColonyEngine.Business.Structures;
 using MarsColonyEngine.Colonizers;
 using MarsColonyEngine.Logger;
 using MarsColonyEngine.Simulation;
@@ -41,6 +42,7 @@ namespace MarsColonyEngine.Context {
         }
         public List<Colonizer> Colonizers { get; private set; } = new List<Colonizer>();
         public List<Structure> Structures { get; private set; } = new List<Structure>();
+        public List<Item> Items { get; private set; } = new List<Item>();
         public static bool IsInitalized {
             get {
                 return _current != null;

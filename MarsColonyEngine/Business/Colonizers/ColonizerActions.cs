@@ -21,21 +21,21 @@ namespace MarsColonyEngine.Colonizers {
                     baseColonyStatsAffect: new ColonyStats(0, 1, 0, 0),
                     deltaDayColonyStatsAffect: new ColonyStats(), // those are managed on every turn in Colonizer class.
                     name: KRandom.Name(),
-                    stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
+                    stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(0.9f, 1.1f), KRandom.Float(30, 70))
                 );
             } else if (type == typeof(Scientist)) {
                 spawnedColonizer = new Scientist(
                     baseColonyStatsAffect: new ColonyStats(0, 1, 0, 0),
                     deltaDayColonyStatsAffect: new ColonyStats(),
                     name: KRandom.Name(),
-                    stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
+                    stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(0.9f, 1.1f), KRandom.Float(30, 70))
                 );
             } else if (type == typeof(Explorer)) {
                 spawnedColonizer = new Explorer(
                     baseColonyStatsAffect: new ColonyStats(0, 1, 0, 0),
                     deltaDayColonyStatsAffect: new ColonyStats(),
                     name: KRandom.Name(),
-                    stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(30, 70))
+                    stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(0.9f, 1.1f), KRandom.Float(30, 70))
                 );
             } else
             if (spawnedColonizer == null)

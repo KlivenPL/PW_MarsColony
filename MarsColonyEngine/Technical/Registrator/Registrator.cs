@@ -1,4 +1,5 @@
-﻿using MarsColonyEngine.Business.Simulation;
+﻿using MarsColonyEngine.Business.Items;
+using MarsColonyEngine.Business.Simulation;
 using MarsColonyEngine.Business.Stats;
 using MarsColonyEngine.Business.Structures;
 using MarsColonyEngine.Colonizers;
@@ -6,7 +7,6 @@ using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Context;
 using MarsColonyEngine.Misc;
 using MarsColonyEngine.Simulation;
-using System;
 
 namespace MarsColonyEngine.Technical {
     public abstract class Registrator : IIdentifiable {
@@ -36,6 +36,9 @@ namespace MarsColonyEngine.Technical {
             if (this is Structure) {
                 ColonyContext.Current.Structures.Add((Structure)this);
             }
+            if (this is Item) {
+                ColonyContext.Current.Items.Add((Item)this);
+            }
             if (this is IActionHandler) {
                 ColonyActions.ColonyActions.RegisterHandler((IActionHandler)this);
             }
@@ -57,6 +60,9 @@ namespace MarsColonyEngine.Technical {
             if (this is Structure) {
                 ColonyContext.Current.Structures.Remove((Structure)this);
             }
+            if (this is Item) {
+                ColonyContext.Current.Items.Remove((Item)this);
+            }
             if (this is IActionHandler) {
                 ColonyActions.ColonyActions.UnregisterHandler((IActionHandler)this);
             }
@@ -64,10 +70,10 @@ namespace MarsColonyEngine.Technical {
                 Simulator.Current?.affectorsManager.UnregisterColonyStatsAffector((IColonyStatsAffector)this);
             }
             if (this is IOnTurnStartedRec) {
-                throw new NotImplementedException();
+                Simulator.Current.UnregisterIOnNextTurnStartedReciever(((IOnTurnStartedRec)this).OnTurnStarted);
             }
             if (this is IOnTurnFinishedRec) {
-                throw new NotImplementedException();
+                Simulator.Current.UnregisterOnTurnFinishedReviever(((IOnTurnFinishedRec)this).OnTurnFinished);
             }
         }
     }

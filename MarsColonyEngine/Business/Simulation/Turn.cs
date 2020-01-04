@@ -1,4 +1,7 @@
-﻿using MarsColonyEngine.Business.Stats;
+﻿using MarsColonyEngine.Business.Items;
+using MarsColonyEngine.Business.Stats;
+using MarsColonyEngine.Context;
+using System.Linq;
 
 namespace MarsColonyEngine.Simulation {
     public class Turn {
@@ -21,10 +24,19 @@ namespace MarsColonyEngine.Simulation {
 
         public void SetNextTurn (ColonyStats prevDeltaDayColonyStats) {
             Day++;
-            PrevDeltaDayColonyStats.Modify(prevDeltaDayColonyStats);
+            PrevDeltaDayColonyStats = prevDeltaDayColonyStats;
+            if (TotalColonyStats.Food < 0) {
+                PrevDeltaDayColonyStats = PrevDeltaDayColonyStats + new ColonyStats(0, 0, 0, -PrevDeltaDayColonyStats.Food);
+            }
+            if (TotalColonyStats.Oxygen < 0) {
+                PrevDeltaDayColonyStats = PrevDeltaDayColonyStats + new ColonyStats(-PrevDeltaDayColonyStats.Oxygen, 0, 0, 0);
+            }
         }
 
-        //public 
+        int CountItems (AvailableItems item) {
+            return ColonyContext.Current.Items.Where(e => e.ItemEnum == item).Sum(e => e.Amount);
+        }
+
         public int AvailableMoves {
             get {
                 return ColonyActions.ColonyActions.GetAvailableActions().Length;

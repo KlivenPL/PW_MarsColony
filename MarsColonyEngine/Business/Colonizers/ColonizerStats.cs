@@ -2,19 +2,18 @@
 using MarsColonyEngine.Logger;
 
 namespace MarsColonyEngine.Business.Colonizers {
-    public class ColonizerStats : IStats {
+    public struct ColonizerStats : IStats {
         public float HP { get; private set; }
         public float Efficiency { get; private set; }
         public float Hunger { get; private set; }
-        public float Space { get; private set; }
+        public float OxygenUsage { get; private set; }
         public float Comfort { get; private set; }
 
-        public ColonizerStats () { }
-        public ColonizerStats (float hP, float efficiency, float hunger, float space, float comfort) {
+        public ColonizerStats (float hP, float efficiency, float hunger, float oxygenUsage, float comfort) {
             HP = hP;
             Efficiency = efficiency;
             Hunger = hunger;
-            Space = space;
+            OxygenUsage = oxygenUsage;
             Comfort = comfort;
         }
 
@@ -28,13 +27,13 @@ namespace MarsColonyEngine.Business.Colonizers {
                 hP: this.HP + otherColonizerStats.HP,
                 efficiency: this.Efficiency + otherColonizerStats.Efficiency,
                 hunger: this.Hunger + otherColonizerStats.Hunger,
-                space: this.Space + otherColonizerStats.Space,
+                oxygenUsage: this.OxygenUsage + otherColonizerStats.OxygenUsage,
                 comfort: this.Comfort + otherColonizerStats.Comfort
             );
         }
 
         public override string ToString () {
-            return $"HP: {HP} pts\nEfficiency: {Efficiency}%\nHunger: {Hunger} kcal\nSpace: {Space}%\nComfort {Comfort}%";
+            return $"HP: {HP} pts\nEfficiency: {Efficiency}%\nHunger: {Hunger} kcal\nOxygen usage: {OxygenUsage}%\nComfort {Comfort}%";
         }
     }
 }

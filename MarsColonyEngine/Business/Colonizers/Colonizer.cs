@@ -3,7 +3,6 @@ using MarsColonyEngine.Business.Simulation;
 using MarsColonyEngine.Business.Stats;
 using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Context;
-using MarsColonyEngine.Helpers;
 using MarsColonyEngine.Logger;
 using MarsColonyEngine.Technical;
 using MarsColonyEngine.Technical.Misc;
@@ -15,6 +14,10 @@ namespace MarsColonyEngine.Colonizers {
         public ColonyStats BaseColonyStatsAffect { get; private set; } = new ColonyStats();
         public ColonyStats DeltaDayColonyStatsAffect { get; private set; } = new ColonyStats();
         public bool IsAlive => Stats.HP > 0;
+        public void AffectHp (float signeDeltaHp) {
+            Stats = (ColonizerStats)Stats.Add(new ColonizerStats(signeDeltaHp + Stats.HP >= 0 ? signeDeltaHp : -Stats.HP, 0, 0, 0, 0));
+            KLogger.Log.Message("Colonizer " + Name + "(" + GetType().Name + ") HP affected: " + signeDeltaHp + ", current value: " + Stats.HP);
+        }
         public Action Destroy => () => {
             Unregister();
             ColonyContext.Current.Colonizers.Remove(this);
@@ -39,16 +42,16 @@ namespace MarsColonyEngine.Colonizers {
         }
 
         public void OnTurnFinished () {
-            DeltaDayColonyStatsAffect.Modify(new ColonyStats(
-            oxygen: -0.78f * KRandom.Float(0.9f, 1.1f),
+            DeltaDayColonyStatsAffect = new ColonyStats(
+            oxygen: -Stats.OxygenUsage,
             population: 0,
             populationLimit: 0,
-            food: -(int)Stats.Hunger
-            ));
+            food: -Stats.Hunger + Math.Min(0, Stats.Efficiency)
+            );
         }
 
         public void OnTurnStarted () {
-            DeltaDayColonyStatsAffect.Modify(new ColonyStats());
+            DeltaDayColonyStatsAffect = new ColonyStats();
             if (IsAlive == false) {
                 Destroy();
                 KLogger.Log.Message("Colonizer " + Name + "(" + GetType().Name + ") has died");
