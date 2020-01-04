@@ -14,6 +14,7 @@ namespace MarsColonyEngine.World {
         private static World GenerateNewWorldProcedure (ref string res) {
             var world = new World();
             ColonyContext.Current.World = world;
+            res = "World has been generated.";
             return world;
         }
 
@@ -25,6 +26,7 @@ namespace MarsColonyEngine.World {
         [ActionProcedure(AvailableActions.NextTurn_Static_User_Paramless, null)]
         private static void NextTurnProcedure (ref string res) {
             Simulation.Simulator.Current.NextTurn();
+            res = $"Next turn! ({ColonyContext.Current.Turn.Day})";
         }
 
         [ActionRequirement(AvailableActions.BuildRescueCapsule_Static_User_Paramless)]

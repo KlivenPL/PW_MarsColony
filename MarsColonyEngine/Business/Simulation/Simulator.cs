@@ -45,6 +45,10 @@ namespace MarsColonyEngine.Simulation {
             OnTurnFinished?.Invoke();
             AffectColonizers();
             AffectStructures();
+            if (CheckForGameOver()) {
+                KLogger.Log.Message("Simulation is over - all Colonizers are dead or all Structures are destroyed!");
+                return;
+            }
             var currTurn = ColonyContext.Current.Turn;
             affectorsManager.GetTotalColonyStats(out ColonyStats baseStats, out ColonyStats deltaDayStats);
             currTurn.SetNextTurn(currTurn.DeltaDayColonyStats);
@@ -76,6 +80,17 @@ namespace MarsColonyEngine.Simulation {
             foreach (IDestructable colonizer in ColonyContext.Current.Colonizers.ToList()) {
                 colonizer.AffectHp(-totalDamage);
             }
+        }
+
+        public bool CheckForGameOver () {
+            if (ColonyContext.Current.Turn.Day < 2)
+                return false;
+            bool allColonizersDead = ColonyContext.Current.Colonizers.Any(e => e.IsAlive) == false;
+            bool allStructuresDestroyed = ColonyContext.Current.Structures.Any(e => e.IsAlive) == false;
+
+            if (allColonizersDead || allStructuresDestroyed)
+                return true;
+            return false;
         }
 
         private void AffectStructures () {

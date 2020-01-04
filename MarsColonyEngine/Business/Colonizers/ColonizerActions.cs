@@ -23,6 +23,7 @@ namespace MarsColonyEngine.Colonizers {
                     name: KRandom.Name(),
                     stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(0.9f, 1.1f), KRandom.Float(30, 70))
                 );
+                res = $"Engineer {spawnedColonizer.Name} has been spawned.";
             } else if (type == typeof(Scientist)) {
                 spawnedColonizer = new Scientist(
                     baseColonyStatsAffect: new ColonyStats(0, 1, 0, 0),
@@ -30,6 +31,7 @@ namespace MarsColonyEngine.Colonizers {
                     name: KRandom.Name(),
                     stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(0.9f, 1.1f), KRandom.Float(30, 70))
                 );
+                res = $"Scientist {spawnedColonizer.Name} has been spawned.";
             } else if (type == typeof(Explorer)) {
                 spawnedColonizer = new Explorer(
                     baseColonyStatsAffect: new ColonyStats(0, 1, 0, 0),
@@ -37,6 +39,7 @@ namespace MarsColonyEngine.Colonizers {
                     name: KRandom.Name(),
                     stats: new ColonizerStats(KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(80, 110), KRandom.Float(0.9f, 1.1f), KRandom.Float(30, 70))
                 );
+                res = $"Explorer {spawnedColonizer.Name} has been spawned.";
             } else
             if (spawnedColonizer == null)
                 res = "Invalid Colonizer class was given.";

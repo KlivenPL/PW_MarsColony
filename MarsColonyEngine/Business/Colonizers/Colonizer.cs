@@ -14,6 +14,8 @@ namespace MarsColonyEngine.Colonizers {
         public ColonyStats DeltaDayColonyStatsAffect { get; protected set; } = new ColonyStats();
         public bool IsAlive => Stats.HP > 0;
         public void AffectHp (float signeDeltaHp) {
+            if (signeDeltaHp == 0)
+                return;
             Stats = (ColonizerStats)Stats.Add(new ColonizerStats(signeDeltaHp + Stats.HP >= 0 ? signeDeltaHp : -Stats.HP, 0, 0, 0, 0));
             KLogger.Log.Message("Colonizer " + Name + "(" + GetType().Name + ") HP affected: " + signeDeltaHp + ", current value: " + Stats.HP);
             if (IsAlive == false) {

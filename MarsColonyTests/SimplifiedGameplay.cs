@@ -3,12 +3,14 @@ using MarsColonyEngine.Colonizers;
 using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Context;
 using MarsColonyEngine.Logger;
+using MarsColonyEngine.Simulation;
 using MarsColonyEngine.World;
 using System;
 using System.Linq;
 
 namespace MarsColonyTests {
     class SimplifiedGameplay {
+
         static void Main (string[] args) {
             KLogger.LogQuietMessages = true;
             KLogger.LogWhisperMessages = true;
@@ -16,10 +18,14 @@ namespace MarsColonyTests {
             ColonyActions.Initalize();
             ColonyContext.InitNewContext();
             var sg = new SimplifiedGameplay();
+            bool simulationOver = false;
 
-            while (true) {
+            while (simulationOver == false) {
+                simulationOver = Simulator.Current.CheckForGameOver();
                 sg.MainGameLoop();
             }
+            KLogger.Log.Error("Simulation is over - all Colonizers are dead or all Structures are destroyed!");
+            Console.ReadLine();
         }
 
         Views currentView = Views.ChooseMenu;
@@ -38,6 +44,10 @@ namespace MarsColonyTests {
                     break;
                 case Views.ShowColonizerStats:
                     ShowColonizerStats();
+                    currentView = Views.ChooseMenu;
+                    break;
+                case Views.ShowStructuresStats:
+                    ShowStructuresStats();
                     currentView = Views.ChooseMenu;
                     break;
                 case Views.ListAllItems:
@@ -117,6 +127,23 @@ namespace MarsColonyTests {
             }
         }
 
+        void ShowStructuresStats () {
+            var structures = ColonyContext.Current.Structures.ToArray();
+            if (structures.Length == 0) {
+                KLogger.Log.Message("No colonizers were spawned.");
+                return;
+            }
+            KLogger.Log.Message("Choose one of the Colonizers shown below:");
+            int j = 1;
+            foreach (var structure in structures) {
+                KLogger.Log.Message(j++ + ": " + structure.Name);
+            }
+            if (CheckIfChosen(structures, out var chosenStructure)) {
+                KLogger.Log.Message($"Structure {chosenStructure.Name} stats:");
+                KLogger.Log.Message(chosenStructure.Stats.ToString());
+            }
+        }
+
         void ListAllItems () {
             var items = ColonyContext.Current.Items;
             if (items.Count == 0) {
@@ -125,7 +152,7 @@ namespace MarsColonyTests {
             }
             int i = 1;
             foreach (var item in items) {
-                KLogger.Log.Message($"{i}: {item.Name} {item.Amount}x");
+                KLogger.Log.Message($"{i}: {item.Amount}x {item.Name}");
             }
         }
 
@@ -200,6 +227,7 @@ namespace MarsColonyTests {
             ShowAvailableActions,
             ShowColonyStats,
             ShowColonizerStats,
+            ShowStructuresStats,
             ListAllItems,
         }
     }

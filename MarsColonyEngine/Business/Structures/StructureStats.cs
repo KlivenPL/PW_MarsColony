@@ -22,5 +22,9 @@ namespace MarsColonyEngine.Business.Structures {
             this.HP = HP;
             this.Efficiency = Efficiency;
         }
+
+        public override string ToString () {
+            return $"HP: {HP} pts\nEfficiency: {Efficiency}";
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace MarsColonyEngine.Business.Colonizers {
         }
 
         public override string ToString () {
-            return $"HP: {HP} pts\nEfficiency: {Efficiency}%\nHunger: {Hunger} kcal\nOxygen usage: {OxygenUsage}%\nComfort {Comfort}%";
+            return $"HP: {HP} pts\nEfficiency: {Efficiency}%\nHunger: {Hunger} kcal/day\nOxygen usage: {OxygenUsage} kg/day\nComfort {Comfort}%";
         }
     }
 }

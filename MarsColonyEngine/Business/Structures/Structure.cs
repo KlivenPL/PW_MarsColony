@@ -13,6 +13,8 @@ namespace MarsColonyEngine.Business.Structures {
         public AvailableStructures StructureEnum { get; private set; }
         public bool IsAlive { get { return Stats.HP > 0; } }
         public void AffectHp (float signeDeltaHp) {
+            if (signeDeltaHp == 0)
+                return;
             Stats = (StructureStats)Stats.Add(new StructureStats(signeDeltaHp + Stats.HP >= 0 ? signeDeltaHp : -Stats.HP, 0));
             KLogger.Log.Message("Structure " + Name + " HP affected: " + signeDeltaHp + ", current value: " + Stats.HP);
             if (IsAlive == false) {

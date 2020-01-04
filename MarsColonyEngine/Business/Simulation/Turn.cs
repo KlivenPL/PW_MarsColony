@@ -26,10 +26,21 @@ namespace MarsColonyEngine.Simulation {
             Day++;
             PrevDeltaDayColonyStats = prevDeltaDayColonyStats;
             if (TotalColonyStats.Food < 0) {
-                PrevDeltaDayColonyStats = PrevDeltaDayColonyStats + new ColonyStats(0, 0, 0, -PrevDeltaDayColonyStats.Food);
+                // PrevDeltaDayColonyStats = PrevDeltaDayColonyStats + new ColonyStats(0, 0, 0, -PrevDeltaDayColonyStats.Food);
+                PrevDeltaDayColonyStats = new ColonyStats(
+                    PrevDeltaDayColonyStats.Oxygen,
+                    PrevDeltaDayColonyStats.Population,
+                    PrevDeltaDayColonyStats.PopulationLimit,
+                    -BaseColonyStats.Food
+                );
             }
             if (TotalColonyStats.Oxygen < 0) {
-                PrevDeltaDayColonyStats = PrevDeltaDayColonyStats + new ColonyStats(-PrevDeltaDayColonyStats.Oxygen, 0, 0, 0);
+                PrevDeltaDayColonyStats = new ColonyStats(
+                    -BaseColonyStats.Oxygen,
+                    PrevDeltaDayColonyStats.Population,
+                    PrevDeltaDayColonyStats.PopulationLimit,
+                    PrevDeltaDayColonyStats.Food
+                );
             }
         }
 
