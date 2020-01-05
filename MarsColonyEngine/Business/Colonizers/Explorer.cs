@@ -7,9 +7,12 @@ using MarsColonyEngine.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace MarsColonyEngine.Colonizers {
-    public class Explorer : Colonizer {
+
+    [Serializable]
+    public class Explorer : Colonizer, ISerializable {
         public Explorer (string name, ColonizerStats stats, ColonyStats baseColonyStatsAffect, ColonyStats deltaDayColonyStatsAffect) : base(name, stats, baseColonyStatsAffect, deltaDayColonyStatsAffect) {
         }
 
@@ -34,7 +37,7 @@ namespace MarsColonyEngine.Colonizers {
             }
 
             if (KRandom.Bool(40)) {
-                res = $"Explorer {Name} has found an Unexamined Sample. Research it in Scientist station.";
+                res = $"Explorer {Name} has found an Unexamined Sample. Research it in Scientist Station.";
                 return new Item(AvailableItems.UnexaminedSample, 1);
             }
             var allExplorableItems = new List<AvailableItems>();
@@ -50,5 +53,7 @@ namespace MarsColonyEngine.Colonizers {
             res = $"Explorer {Name} has found {exploredItem.ToString().SplitCamelCase()}.";
             return new Item(exploredItem, 1);
         }
+
+        public Explorer (SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

@@ -1,10 +1,13 @@
 ﻿using MarsColonyEngine.Business.Colonizers;
 using MarsColonyEngine.Business.Stats;
 using MarsColonyEngine.ColonyActions;
+using System;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace MarsColonyEngine.Colonizers {
-    public class Scientist : Colonizer {
+    [Serializable]
+    public class Scientist : Colonizer, ISerializable {
         public Scientist (string name, ColonizerStats stats, ColonyStats baseColonyStatsAffect, ColonyStats deltaDayColonyStatsAffect) : base(name, stats, baseColonyStatsAffect, deltaDayColonyStatsAffect) {
         }
 
@@ -13,5 +16,8 @@ namespace MarsColonyEngine.Colonizers {
 
             }).ToArray();
         }
+
+        public Scientist (SerializationInfo info, StreamingContext context) : base(info, context) { }
+
     }
 }

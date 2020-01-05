@@ -1,10 +1,13 @@
 ﻿using MarsColonyEngine.Business.Items;
 using MarsColonyEngine.Business.Stats;
 using MarsColonyEngine.Context;
+using System;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace MarsColonyEngine.Simulation {
-    public class Turn {
+    [Serializable]
+    public class Turn : ISerializable {
         public ColonyStats PrevDeltaDayColonyStats { get; private set; } = new ColonyStats();
         public ColonyStats BaseColonyStats {
             get {
@@ -46,6 +49,16 @@ namespace MarsColonyEngine.Simulation {
 
         public int CountItems (AvailableItems item) {
             return ColonyContext.Current.Items.Where(e => e.ItemEnum == item).Sum(e => e.Amount);
+        }
+        public Turn () { }
+
+        public void GetObjectData (SerializationInfo info, StreamingContext context) {
+            info.AddValue(nameof(PrevDeltaDayColonyStats), PrevDeltaDayColonyStats);
+            info.AddValue(nameof(Day), Day);
+        }
+        public Turn (SerializationInfo info, StreamingContext context) {
+            PrevDeltaDayColonyStats = (ColonyStats)info.GetValue(nameof(PrevDeltaDayColonyStats), typeof(ColonyStats));
+            Day = (int)info.GetValue(nameof(Day), typeof(int));
         }
 
         public int AvailableMoves {

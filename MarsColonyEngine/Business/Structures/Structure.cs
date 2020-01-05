@@ -7,9 +7,11 @@ using MarsColonyEngine.Logger;
 using MarsColonyEngine.Technical;
 using MarsColonyEngine.Technical.Misc;
 using System;
+using System.Runtime.Serialization;
 
 namespace MarsColonyEngine.Business.Structures {
-    public class Structure : Registrator, IDestructable, IColonizerStatsAffector, IColonyStatsAffector, IOnFirstTurnStartedRec, IOnTurnStartedRec {
+    [Serializable]
+    public class Structure : Registrator, IDestructable, IColonizerStatsAffector, IColonyStatsAffector, IOnFirstTurnStartedRec, IOnTurnStartedRec, ISerializable {
         public AvailableStructures StructureEnum { get; private set; }
         public bool IsAlive { get { return Stats.HP > 0; } }
         public void AffectHp (float signeDeltaHp) {
@@ -66,6 +68,26 @@ namespace MarsColonyEngine.Business.Structures {
                 default:
                     break;
             }
+        }
+
+        public void GetObjectData (SerializationInfo info, StreamingContext context) {
+            info.AddValue(nameof(Name), Name);
+            info.AddValue(nameof(StructureEnum), StructureEnum);
+            info.AddValue(nameof(Stats), Stats);
+            info.AddValue(nameof(BaseColonizerStatsAffect), BaseColonizerStatsAffect);
+            info.AddValue(nameof(DeltaDayColonizerStatsAffect), DeltaDayColonizerStatsAffect);
+            info.AddValue(nameof(BaseColonyStatsAffect), BaseColonyStatsAffect);
+            info.AddValue(nameof(DeltaDayColonyStatsAffect), DeltaDayColonyStatsAffect);
+        }
+
+        public Structure (SerializationInfo info, StreamingContext context) {
+            Name = info.GetString(nameof(Name));
+            StructureEnum = (AvailableStructures)info.GetValue(nameof(StructureEnum), typeof(AvailableStructures));
+            Stats = (StructureStats)info.GetValue(nameof(Stats), typeof(StructureStats));
+            BaseColonizerStatsAffect = (ColonizerStats)info.GetValue(nameof(BaseColonizerStatsAffect), typeof(ColonizerStats));
+            DeltaDayColonizerStatsAffect = (ColonizerStats)info.GetValue(nameof(DeltaDayColonizerStatsAffect), typeof(ColonizerStats));
+            BaseColonyStatsAffect = (ColonyStats)info.GetValue(nameof(BaseColonyStatsAffect), typeof(ColonyStats));
+            DeltaDayColonyStatsAffect = (ColonyStats)info.GetValue(nameof(DeltaDayColonyStatsAffect), typeof(ColonyStats));
         }
     }
 }

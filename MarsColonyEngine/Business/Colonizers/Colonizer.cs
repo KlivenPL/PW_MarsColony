@@ -6,9 +6,11 @@ using MarsColonyEngine.Logger;
 using MarsColonyEngine.Technical;
 using MarsColonyEngine.Technical.Misc;
 using System;
+using System.Runtime.Serialization;
 
 namespace MarsColonyEngine.Colonizers {
-    public abstract class Colonizer : Registrator, IActionHandler, IColonyStatsAffector, IDestructable, IOnFirstTurnStartedRec, IOnTurnStartedRec, IOnTurnFinishedRec {
+    [Serializable]
+    public abstract class Colonizer : Registrator, IActionHandler, IColonyStatsAffector, IDestructable, IOnFirstTurnStartedRec, IOnTurnStartedRec, IOnTurnFinishedRec, ISerializable {
         public ColonizerStats Stats { get; protected set; } = new ColonizerStats();
         public ColonyStats BaseColonyStatsAffect { get; protected set; } = new ColonyStats();
         public ColonyStats DeltaDayColonyStatsAffect { get; protected set; } = new ColonyStats();
@@ -57,6 +59,20 @@ namespace MarsColonyEngine.Colonizers {
         public void OnTurnStarted () {
             DeltaDayColonyStatsAffect = new ColonyStats();
             Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 100 - Stats.Efficiency, 0, 0, 0)); // restoring efficiency to 100%
+        }
+
+        public void GetObjectData (SerializationInfo info, StreamingContext context) {
+            info.AddValue(nameof(Name), Name);
+            info.AddValue(nameof(Stats), Stats);
+            info.AddValue(nameof(BaseColonyStatsAffect), BaseColonyStatsAffect);
+            info.AddValue(nameof(DeltaDayColonyStatsAffect), DeltaDayColonyStatsAffect);
+        }
+
+        public Colonizer (SerializationInfo info, StreamingContext context) {
+            Name = info.GetString(nameof(Name));
+            Stats = (ColonizerStats)info.GetValue(nameof(Stats), typeof(ColonizerStats));
+            BaseColonyStatsAffect = (ColonyStats)info.GetValue(nameof(BaseColonyStatsAffect), typeof(ColonyStats));
+            DeltaDayColonyStatsAffect = (ColonyStats)info.GetValue(nameof(DeltaDayColonyStatsAffect), typeof(ColonyStats));
         }
     }
 }

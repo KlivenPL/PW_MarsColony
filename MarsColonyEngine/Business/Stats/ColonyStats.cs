@@ -1,6 +1,8 @@
 ﻿using MarsColonyEngine.Logger;
+using System;
 
 namespace MarsColonyEngine.Business.Stats {
+    [Serializable]
     public struct ColonyStats : IStats {
         /// <summary>
         /// KG

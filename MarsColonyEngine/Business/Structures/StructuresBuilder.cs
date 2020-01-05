@@ -8,7 +8,8 @@ namespace MarsColonyEngine.Business.Structures {
         SimpleShelter,
         PotatoFarm,
         ArmoredBedroom,
-        AluminiumMine
+        AluminiumMine,
+        OxygenGenerator
     }
     public static class StructuresBuilder {
         public static Structure RescueCapsule () {
@@ -16,8 +17,8 @@ namespace MarsColonyEngine.Business.Structures {
                 structureEnum: AvailableStructures.RescueCapsule,
                 baseColonizerStatsAffect: new ColonizerStats(0, 0, 0, 0, 10f),
                 deltaDayColonizerStatsAffect: default,
-                baseColonyStatsAffect: new ColonyStats(0, 0, 3, 300*10),
-                deltaDayColonyStatsAffect: new ColonyStats(3f, 0, 0, 0),
+                baseColonyStatsAffect: new ColonyStats(0, 0, 3, 300 * 10),
+                deltaDayColonyStatsAffect: new ColonyStats(3.5f, 0, 0, 0),
                 stats: new StructureStats(500, 100)
                 );
         }
@@ -39,7 +40,7 @@ namespace MarsColonyEngine.Business.Structures {
                 baseColonizerStatsAffect: default,
                 deltaDayColonizerStatsAffect: default,
                 baseColonyStatsAffect: default,
-                deltaDayColonyStatsAffect: new ColonyStats(0, 0, 0, 125f),
+                deltaDayColonyStatsAffect: new ColonyStats(0, 0, 0, 250f),
                 stats: new StructureStats(50, 100)
                 );
         }
@@ -50,7 +51,7 @@ namespace MarsColonyEngine.Business.Structures {
                 baseColonizerStatsAffect: default,
                 deltaDayColonizerStatsAffect: default,
                 baseColonyStatsAffect: default,
-                deltaDayColonyStatsAffect: new ColonyStats(-1f, 0, 0, 0),
+                deltaDayColonyStatsAffect: new ColonyStats(-0.5f, 0, 0, 0),
                 stats: new StructureStats(100, 100)
                 );
         }
@@ -64,6 +65,17 @@ namespace MarsColonyEngine.Business.Structures {
                 baseColonyStatsAffect: new ColonyStats(0, 0, 2, 0),
                 deltaDayColonyStatsAffect: default,
                 stats: new StructureStats(250, 100)
+                );
+        }
+
+        public static Structure OxygenGenerator () {
+            return new Structure(
+                structureEnum: AvailableStructures.OxygenGenerator,
+                baseColonizerStatsAffect: default,
+                deltaDayColonizerStatsAffect: default,
+                baseColonyStatsAffect: default,
+                deltaDayColonyStatsAffect: new ColonyStats(1f, 0, 0, 0),
+                stats: new StructureStats(50, 100)
                 );
         }
 

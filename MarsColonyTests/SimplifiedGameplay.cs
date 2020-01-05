@@ -6,6 +6,7 @@ using MarsColonyEngine.Logger;
 using MarsColonyEngine.Simulation;
 using MarsColonyEngine.World;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace MarsColonyTests {
@@ -14,9 +15,10 @@ namespace MarsColonyTests {
         static void Main (string[] args) {
             KLogger.LogQuietMessages = true;
             KLogger.LogWhisperMessages = true;
-            ColonyContext.Create();
+         //   ColonyContext.Create();
+            ColonyContext.Load(new FileInfo("C:/Users/oskar/desktop/save_test1.json"));
             ColonyActions.Initalize();
-            ColonyContext.InitNewContext();
+         //   ColonyContext.InitNewContext();
             var sg = new SimplifiedGameplay();
             bool simulationOver = false;
 
@@ -52,6 +54,10 @@ namespace MarsColonyTests {
                     break;
                 case Views.ListAllItems:
                     ListAllItems();
+                    currentView = Views.ChooseMenu;
+                    break;
+                case Views.Save:
+                    Save();
                     currentView = Views.ChooseMenu;
                     break;
             }
@@ -189,6 +195,9 @@ namespace MarsColonyTests {
                 case AvailableActions.BuildStructurePotatoFarm_Handler_User_Paramless:
                     ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildStructurePotatoFarm_Handler_User_Paramless, (Engineer)handler);
                     break;
+                case AvailableActions.BuildStructureOxygenGenerator_Handler_User_Paramless:
+                    ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildStructureOxygenGenerator_Handler_User_Paramless, (Engineer)handler);
+                    break;
             }
             return true;
         }
@@ -214,14 +223,9 @@ namespace MarsColonyTests {
         }
 
 
-        string prevRender;
-        void Render (string render) {
-            if (render != prevRender) {
-                KLogger.Log.Message(render);
-                prevRender = render;
-            }
+        void Save () {
+            ColonyContext.Save(new FileInfo("C:/Users/Oskar/Desktop/saveXD.json"));
         }
-
         public enum Views {
             ChooseMenu,
             ShowAvailableActions,
@@ -229,6 +233,7 @@ namespace MarsColonyTests {
             ShowColonizerStats,
             ShowStructuresStats,
             ListAllItems,
+            Save
         }
     }
 }

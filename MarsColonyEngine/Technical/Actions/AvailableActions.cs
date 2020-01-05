@@ -10,7 +10,7 @@ namespace MarsColonyEngine.ColonyActions {
         [Description("Spawn Colonizer ( Handler: none, args: <type: [explorer/scientist/engineer]> )")]
         SpawnColonizer_Static_Simulation_Args,
 
-        [Description("Build Simple Shelter. Requires 75 Aluminium ( Handler: engineer, args: none )")]
+        [Description("Build Simple Shelter. Requires 50 Aluminium ( Handler: engineer, args: none )")]
         BuildStructureSimpleShelter_Handler_User_Paramless,
 
         [Description("Next turn ( Handler: none, args: none )")]
@@ -25,7 +25,10 @@ namespace MarsColonyEngine.ColonyActions {
         [Description("Build Aluminium Mine. Requires 1 Aluminium Ore Map ( Handler: engineer, args: none)")]
         BuildStructureAluminiumMine_Handler_User_Paramless,
 
-        [Description("Build Potato farm. Requires 50 Aluminium ( Handler: engineer, args: none)")]
+        [Description("Build Potato farm. Requires 25 Aluminium ( Handler: engineer, args: none)")]
         BuildStructurePotatoFarm_Handler_User_Paramless,
+
+        [Description("Build Oxygen Generator. Requires 25 Aluminium ( Handler: engineer, args: none)")]
+        BuildStructureOxygenGenerator_Handler_User_Paramless,
     }
 }

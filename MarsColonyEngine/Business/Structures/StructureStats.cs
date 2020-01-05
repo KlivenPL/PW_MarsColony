@@ -1,7 +1,9 @@
 ﻿using MarsColonyEngine.Business.Stats;
 using MarsColonyEngine.Logger;
+using System;
 
 namespace MarsColonyEngine.Business.Structures {
+    [Serializable]
     public struct StructureStats : IStats {
         public float HP { get; private set; }
         public float Efficiency { get; private set; }

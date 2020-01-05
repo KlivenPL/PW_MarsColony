@@ -57,6 +57,10 @@ namespace MarsColonyEngine.Simulation {
             OnTurnStarted?.Invoke();
         }
 
+        public void ClearOnFirstTurnStarted () {
+            OnFirstTurnStarted = null;
+        }
+
         private void AffectColonizers () {
             var totalColonyStats = ColonyContext.Current.Turn.TotalColonyStats;
             var totalDamage = 0f;
@@ -72,8 +76,8 @@ namespace MarsColonyEngine.Simulation {
             if (totalColonyStats.Oxygen < 0) {
                 var totalOxygenUsage = ColonyContext.Current.Colonizers.Sum(col => col.Stats.OxygenUsage);
                 var deltaOxygen = totalColonyStats.Oxygen + totalOxygenUsage;
-                var lackOfOxygenDamage = (1 - deltaOxygen / totalOxygenUsage) * 200;
-                totalDamage += lackOfOxygenDamage;
+                var lackOfOxygenDamage = (1 - deltaOxygen / totalOxygenUsage) * 100;
+                totalDamage += lackOfOxygenDamage / ColonyContext.Current.Colonizers.Count;
                 KLogger.Log.Message("Colonizers are suffocating!");
             }
 

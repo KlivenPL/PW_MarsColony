@@ -5,8 +5,6 @@ using MarsColonyEngine.Technical;
 
 namespace MarsColonyEngine.World {
     public class World : Registrator, IActionHandler, IOnFirstTurnStartedRec {
-        public const int size = 100;
-
         public bool IsActive => ColonyContext.IsInitalized;
 
 
