@@ -46,7 +46,7 @@ namespace MarsColonyEngine.Simulation {
             AffectColonizers();
             AffectStructures();
             if (CheckForGameOver()) {
-                KLogger.Log.Message("Simulation is over - all Colonizers are dead or all Structures are destroyed!");
+                KLogger.Log.Warning("Simulation is over - all Colonizers are dead or all Structures are destroyed!");
                 return;
             }
             var currTurn = ColonyContext.Current.Turn;
@@ -70,7 +70,7 @@ namespace MarsColonyEngine.Simulation {
                 var deltaHunger = totalColonyStats.Food + totalHunger;
                 var hungerDamage = (1 - deltaHunger / totalHunger) * 25;
                 totalDamage += hungerDamage;
-                KLogger.Log.Message("Colonizers are starving!");
+                KLogger.Log.Warning("Colonizers are starving!");
             }
 
             if (totalColonyStats.Oxygen < 0) {
@@ -78,7 +78,7 @@ namespace MarsColonyEngine.Simulation {
                 var deltaOxygen = totalColonyStats.Oxygen + totalOxygenUsage;
                 var lackOfOxygenDamage = (1 - deltaOxygen / totalOxygenUsage) * 100;
                 totalDamage += lackOfOxygenDamage / ColonyContext.Current.Colonizers.Count;
-                KLogger.Log.Message("Colonizers are suffocating!");
+                KLogger.Log.Warning("Colonizers are suffocating!");
             }
 
             foreach (IDestructable colonizer in ColonyContext.Current.Colonizers.ToList()) {

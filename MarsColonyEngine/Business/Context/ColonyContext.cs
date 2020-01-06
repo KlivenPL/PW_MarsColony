@@ -53,10 +53,10 @@ namespace MarsColonyEngine.Context {
             }
         }
 
-        public static void Load (FileInfo file) {
+        public static bool Load (FileInfo file) {
             if (_current != null) {
                 KLogger.Log.Error("Cannot load - save is already loaded. Call ColonyContext.Current.Unload() first.");
-                return;
+                return false;
             }
             if (file.Exists) {
                 try {
@@ -66,12 +66,13 @@ namespace MarsColonyEngine.Context {
                     }
                 } catch (Exception e) {
                     KLogger.Log.Error($"Error while loading context occured:\n{e.Message},\n{e.StackTrace}");
-                    return;
+                    return false;
                 }
                 KLogger.Log.Quiet("Context loaded successfully.");
-                return;
+                return true;
             }
             KLogger.Log.Error($"Error while loading context occured:\n file {file.FullName} does not exist");
+            return false;
         }
 
         public static void Save (FileInfo file) {
@@ -90,7 +91,7 @@ namespace MarsColonyEngine.Context {
                 KLogger.Log.Error($"Error while saving context occured:\n{e.Message},\n{e.StackTrace}");
                 return;
             }
-            KLogger.Log.Quiet("Context saved successfully.");
+            KLogger.Log.Quiet($"Context saved successfully to {file.FullName}");
         }
 
         public static void Create () {

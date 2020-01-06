@@ -7,7 +7,7 @@ namespace MarsColonyEngine.ColonyActions {
         [Description("Generate new world ( Handler: none, args: none)")]
         GenerateNewWorld_Static_User_Paramless,
 
-        [Description("Spawn Colonizer ( Handler: none, args: <type: [explorer/scientist/engineer]> )")]
+        [Description("Spawn Colonizer. It takes whole turn. ( Handler: none, args: <type: [explorer/scientist/engineer]> )")]
         SpawnColonizer_Static_Simulation_Args,
 
         [Description("Build Simple Shelter. Requires 50 Aluminium ( Handler: engineer, args: none )")]
@@ -30,5 +30,17 @@ namespace MarsColonyEngine.ColonyActions {
 
         [Description("Build Oxygen Generator. Requires 25 Aluminium ( Handler: engineer, args: none)")]
         BuildStructureOxygenGenerator_Handler_User_Paramless,
+
+        [Description("Repair a structure. Requires at most 20 Aluminium ( Handler: engineer, args: <type: structure>)")]
+        RepairStructure_Handler_User_Args,
+
+        [Description("Build Research Station. Requires 10 Aluminium. It takes whole turn. ( Handler: engineer, args: none)")]
+        BuildResearchStation_Handler_User_Paramless,
+
+        [Description("Order a Scientist to do the research. Requires 1 Unexamined Sample and Research Station built. ( Handler: Scientist, args: none)")]
+        DoResearch_Handler_User_Paramless,
+
+        [Description("Build Armored Bedroom. Requires 75 Aluminium and 1 Armored Bedroom Blueprint. ( Handler: engineer, args: none)")]
+        BuildArmoredBedroom_Handler_User_Paramless,
     }
 }

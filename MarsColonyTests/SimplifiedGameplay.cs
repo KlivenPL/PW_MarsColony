@@ -1,4 +1,5 @@
 ﻿using ExtentionMethods;
+using MarsColonyEngine.Business.Structures;
 using MarsColonyEngine.Colonizers;
 using MarsColonyEngine.ColonyActions;
 using MarsColonyEngine.Context;
@@ -15,10 +16,22 @@ namespace MarsColonyTests {
         static void Main (string[] args) {
             KLogger.LogQuietMessages = true;
             KLogger.LogWhisperMessages = true;
-         //   ColonyContext.Create();
-            ColonyContext.Load(new FileInfo("C:/Users/oskar/desktop/save_test1.json"));
+
+            bool loaded = false;
+            if (args.Length > 0) {
+                loaded = ColonyContext.Load(new FileInfo(args[0]));
+                if (!loaded) {
+                    KLogger.Log.Error("Could not load save file, creating new Context instead...");
+                    ColonyContext.Create();
+                }
+            } else {
+                ColonyContext.Create();
+            }
             ColonyActions.Initalize();
-         //   ColonyContext.InitNewContext();
+
+            if (loaded == false)
+                ColonyContext.InitNewContext();
+
             var sg = new SimplifiedGameplay();
             bool simulationOver = false;
 
@@ -64,7 +77,7 @@ namespace MarsColonyTests {
         }
 
         void ChooseMenu () {
-            KLogger.Log.Message("Choose menu: ");
+            KLogger.Log.Message("\nChoose menu: ");
             var menus = (Views[])Enum.GetValues(typeof(Views));
             menus = menus.Skip(1).ToArray();
             if (CheckIfChosen(menus, out var chosenMenu, true)) {
@@ -98,21 +111,17 @@ namespace MarsColonyTests {
                         KLogger.Log.Error("Incorrect handler was chosen. Enter handler id and try again");
                     }
                 }
-                string readArgs = "";
-                if (chosenAction.ToString().ToLower().Contains("args")) {
-                    KLogger.Log.Message("Enter args and press enter:");
-                    readArgs = Console.ReadLine();
-                }
-                if (ExecuteAction(chosenAction, readArgs, out string result, chosenHandler) == false) {
+                if (ExecuteAction(chosenAction, out string result, chosenHandler) == false) {
                     KLogger.Log.Error(result);
                 }
-                // prevRender = "";
                 availableActions = null;
             }
         }
 
         void ShowColonyStats () {
-            KLogger.Log.Message("Colony stats:");
+            KLogger.Log.Message("\nColony stats:");
+            KLogger.Log.Message($"Day: { ColonyContext.Current.Turn.Day }\n");
+            KLogger.Log.Message("Total stats:");
             KLogger.Log.Message(ColonyContext.Current.Turn.TotalColonyStats.ToString());
         }
 
@@ -136,10 +145,10 @@ namespace MarsColonyTests {
         void ShowStructuresStats () {
             var structures = ColonyContext.Current.Structures.ToArray();
             if (structures.Length == 0) {
-                KLogger.Log.Message("No colonizers were spawned.");
+                KLogger.Log.Message("No structures were built.");
                 return;
             }
-            KLogger.Log.Message("Choose one of the Colonizers shown below:");
+            KLogger.Log.Message("Choose one of the Structures shown below:");
             int j = 1;
             foreach (var structure in structures) {
                 KLogger.Log.Message(j++ + ": " + structure.Name);
@@ -156,26 +165,25 @@ namespace MarsColonyTests {
                 KLogger.Log.Message("No items available.");
                 return;
             }
+            KLogger.Log.Message("\nAvailable Items:");
             int i = 1;
             foreach (var item in items) {
                 KLogger.Log.Message($"{i}: {item.Amount}x {item.Name}");
+                i++;
             }
         }
 
-        bool ExecuteAction (AvailableActions action, string args, out string result, IActionHandler handler = null) {
+        bool ExecuteAction (AvailableActions action, out string result, IActionHandler handler = null) {
             result = "OK";
-            var rawArgs = args.Split(new string[] { ",", "\n", "\r\n", " " }, StringSplitOptions.RemoveEmptyEntries);
             switch (action) {
                 case AvailableActions.GenerateNewWorld_Static_User_Paramless:
                     ColonyActions.ExecuteAction<World>(AvailableActions.GenerateNewWorld_Static_User_Paramless, null);
                     break;
                 case AvailableActions.SpawnColonizer_Static_Simulation_Args:
-                    var colonizerType = Type.GetType($"MarsColonyEngine.Colonizers.{rawArgs[0]}, MarsColonyEngine", false, true);
-                    if (colonizerType == null) {
-                        result = "Invalid Colonizer type: " + rawArgs[0];
-                        return false;
+                    var availableColonizerTypes = new string[] { nameof(Engineer), nameof(Scientist), nameof(Explorer) };
+                    if (CheckIfChosen<string>(availableColonizerTypes, out string chosenColonizerType, true)) {
+                        ColonyActions.ExecuteAction<Engineer>(AvailableActions.SpawnColonizer_Static_Simulation_Args, null, chosenColonizerType);
                     }
-                    ColonyActions.ExecuteAction<World>(AvailableActions.SpawnColonizer_Static_Simulation_Args, null, colonizerType);
                     break;
                 case AvailableActions.BuildStructureSimpleShelter_Handler_User_Paramless:
                     ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildStructureSimpleShelter_Handler_User_Paramless, (Engineer)handler);
@@ -189,6 +197,9 @@ namespace MarsColonyTests {
                 case AvailableActions.Explore_Handler_User_Paramless:
                     ColonyActions.ExecuteAction<Explorer>(AvailableActions.Explore_Handler_User_Paramless, (Explorer)handler);
                     break;
+                case AvailableActions.DoResearch_Handler_User_Paramless:
+                    ColonyActions.ExecuteAction<Scientist>(AvailableActions.DoResearch_Handler_User_Paramless, (Scientist)handler);
+                    break;
                 case AvailableActions.BuildStructureAluminiumMine_Handler_User_Paramless:
                     ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildStructureAluminiumMine_Handler_User_Paramless, (Engineer)handler);
                     break;
@@ -198,6 +209,20 @@ namespace MarsColonyTests {
                 case AvailableActions.BuildStructureOxygenGenerator_Handler_User_Paramless:
                     ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildStructureOxygenGenerator_Handler_User_Paramless, (Engineer)handler);
                     break;
+                case AvailableActions.BuildResearchStation_Handler_User_Paramless:
+                    ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildResearchStation_Handler_User_Paramless, (Engineer)handler);
+                    break;
+                case AvailableActions.BuildArmoredBedroom_Handler_User_Paramless:
+                    ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildArmoredBedroom_Handler_User_Paramless, (Engineer)handler);
+                    break;
+                case AvailableActions.RepairStructure_Handler_User_Args:
+                    var structuresToRepair = ColonyContext.Current.Structures.Where(e => e.Stats.HP != e.Stats.MaxHP).ToArray();
+                    var descriptions = structuresToRepair.Select(e => $"{e.Name}: {e.Stats.HP} / {e.Stats.MaxHP} HP").ToArray();
+
+                    if (CheckIfChosen<Structure>(structuresToRepair, out Structure structureToRepair, true, descriptions)) {
+                        ColonyActions.ExecuteAction<Engineer>(AvailableActions.RepairStructure_Handler_User_Args, (Engineer)handler, structureToRepair);
+                    }
+                    break;
             }
             return true;
         }
@@ -206,7 +231,8 @@ namespace MarsColonyTests {
             int i = 1;
             if (printOptions) {
                 foreach (var item in array) {
-                    KLogger.Log.Message(i++ + ": " + (optionDescriptions == null ? item.ToString().SplitCamelCase() : optionDescriptions[i]));
+                    KLogger.Log.Message(i + ": " + (optionDescriptions == null ? item.ToString().SplitCamelCase() : optionDescriptions[i - 1]));
+                    i++;
                 }
             }
             chosen = default;
@@ -224,7 +250,17 @@ namespace MarsColonyTests {
 
 
         void Save () {
-            ColonyContext.Save(new FileInfo("C:/Users/Oskar/Desktop/saveXD.json"));
+            KLogger.Log.Message("\nEnter save file name:");
+            var save = Console.ReadLine();
+            save = MakeValidFileName(save);
+            ColonyContext.Save(new FileInfo(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/" + save + ".json"));
+            KLogger.Log.Message("In order to load saved file, run this executable with full path to saved file as a parameter.");
+        }
+        private static string MakeValidFileName (string name) {
+            string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars()));
+            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+
+            return System.Text.RegularExpressions.Regex.Replace(name, invalidRegStr, "_");
         }
         public enum Views {
             ChooseMenu,

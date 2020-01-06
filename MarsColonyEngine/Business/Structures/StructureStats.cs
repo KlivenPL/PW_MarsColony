@@ -5,6 +5,8 @@ using System;
 namespace MarsColonyEngine.Business.Structures {
     [Serializable]
     public struct StructureStats : IStats {
+
+        public float MaxHP { get; private set; }
         public float HP { get; private set; }
         public float Efficiency { get; private set; }
 
@@ -17,16 +19,18 @@ namespace MarsColonyEngine.Business.Structures {
             return new StructureStats() {
                 Efficiency = this.Efficiency + otherStructureStats.Efficiency,
                 HP = this.HP + otherStructureStats.HP,
+                MaxHP = this.MaxHP + otherStructureStats.MaxHP
             };
         }
 
-        public StructureStats (float HP, float Efficiency) {
+        public StructureStats (float HP, float MaxHP, float Efficiency) {
             this.HP = HP;
+            this.MaxHP = MaxHP;
             this.Efficiency = Efficiency;
         }
 
         public override string ToString () {
-            return $"HP: {HP} pts\nEfficiency: {Efficiency}";
+            return $"HP: {HP} / {MaxHP} pts\nEfficiency: {Efficiency}";
         }
     }
 }

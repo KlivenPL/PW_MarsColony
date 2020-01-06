@@ -29,7 +29,7 @@ namespace MarsColonyEngine.Colonizers {
 
         [ActionProcedure(AvailableActions.Explore_Handler_User_Paramless, typeof(Explorer))]
         private Item ExploreProcedure (ref string res) {
-            Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, -100, 0, 0, 0));
+            Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 0, -100, 0, 0, 0));
             var foundSomething = KRandom.Bool(40);
             if (foundSomething == false) {
                 res = $"Explorer {Name} did not find anything.";
@@ -42,10 +42,8 @@ namespace MarsColonyEngine.Colonizers {
             }
             var allExplorableItems = new List<AvailableItems>();
 
-            // var allBlueprints = ((AvailableItems[])Enum.GetValues(typeof(AvailableItems))).Where(e => e.ToString().Contains("Blueprint")).ToList();
             var allMaps = ((AvailableItems[])Enum.GetValues(typeof(AvailableItems))).Where(e => e.ToString().Contains("Map")).ToList();
 
-            //  allExplorableItems.AddRange(allBlueprints);
             allExplorableItems.AddRange(allMaps);
 
             var exploredItem = allExplorableItems[KRandom.Int(0, allExplorableItems.Count)];

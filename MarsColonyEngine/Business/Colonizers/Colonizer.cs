@@ -18,11 +18,11 @@ namespace MarsColonyEngine.Colonizers {
         public void AffectHp (float signeDeltaHp) {
             if (signeDeltaHp == 0)
                 return;
-            Stats = (ColonizerStats)Stats.Add(new ColonizerStats(signeDeltaHp + Stats.HP >= 0 ? signeDeltaHp : -Stats.HP, 0, 0, 0, 0));
+            Stats = (ColonizerStats)Stats.Add(new ColonizerStats(signeDeltaHp + Stats.HP >= 0 ? signeDeltaHp : -Stats.HP, 0, 0, 0, 0, 0));
             KLogger.Log.Message("Colonizer " + Name + "(" + GetType().Name + ") HP affected: " + signeDeltaHp + ", current value: " + Stats.HP);
             if (IsAlive == false) {
                 Destroy();
-                KLogger.Log.Message("Colonizer " + Name + "(" + GetType().Name + ") has died");
+                KLogger.Log.Warning("Colonizer " + Name + "(" + GetType().Name + ") has died");
             }
         }
         public Action Destroy => () => {
@@ -58,7 +58,7 @@ namespace MarsColonyEngine.Colonizers {
 
         public void OnTurnStarted () {
             DeltaDayColonyStatsAffect = new ColonyStats();
-            Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 100 - Stats.Efficiency, 0, 0, 0)); // restoring efficiency to 100%
+            Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 0, 100 - Stats.Efficiency, 0, 0, 0)); // restoring efficiency to 100%
         }
 
         public void GetObjectData (SerializationInfo info, StreamingContext context) {

@@ -39,6 +39,8 @@ namespace MarsColonyEngine.Technical {
             }
             if (this is Item) {
                 var item = (Item)this;
+                ColonyContext.Current.Items.Where(e => e.IsAlive == false).ToList().ForEach(e => e.Destroy());
+
                 if (ColonyContext.Current.Turn.CountItems(item.ItemEnum) == 0)
                     ColonyContext.Current.Items.Add(item);
                 else

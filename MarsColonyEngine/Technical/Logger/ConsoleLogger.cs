@@ -26,6 +26,15 @@ namespace MarsColonyEngine.Logger {
                 Console.WriteLine();
             }
         }
+
+        public void Warning (string message) {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Error.Write("Warning: ");
+            Console.ResetColor();
+            Console.Error.Write(message);
+            Console.Error.WriteLine();
+        }
+
         public void Whisper (string message) {
             if (LogQuietMessages) {
                 Console.ForegroundColor = ConsoleColor.DarkGray;

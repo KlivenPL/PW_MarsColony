@@ -17,11 +17,11 @@ namespace MarsColonyEngine.Business.Structures {
         public void AffectHp (float signeDeltaHp) {
             if (signeDeltaHp == 0)
                 return;
-            Stats = (StructureStats)Stats.Add(new StructureStats(signeDeltaHp + Stats.HP >= 0 ? signeDeltaHp : -Stats.HP, 0));
+            Stats = (StructureStats)Stats.Add(new StructureStats(signeDeltaHp + Stats.HP >= 0 ? signeDeltaHp : -Stats.HP, 0, 0));
             KLogger.Log.Message("Structure " + Name + " HP affected: " + signeDeltaHp + ", current value: " + Stats.HP);
             if (IsAlive == false) {
                 Destroy();
-                KLogger.Log.Message("Structure " + Name + " has been destroyed!");
+                KLogger.Log.Warning("Structure " + Name + " has been destroyed!");
             }
         }
         public Action Destroy => () => {
@@ -61,9 +61,14 @@ namespace MarsColonyEngine.Business.Structures {
         }
 
         public void OnTurnStarted () {
+            Stats = new StructureStats(
+                HP: Stats.HP,
+                MaxHP: Stats.MaxHP,
+                Efficiency: Stats.HP / Stats.MaxHP * 100f
+            );
             switch (StructureEnum) {
                 case AvailableStructures.AluminiumMine:
-                    new Item(AvailableItems.Aluminium, 5);
+                    new Item(AvailableItems.Aluminium, (int)(5 * (Stats.Efficiency / 100f)));
                     break;
                 default:
                     break;

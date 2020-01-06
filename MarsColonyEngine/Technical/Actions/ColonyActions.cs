@@ -101,10 +101,7 @@ namespace MarsColonyEngine.ColonyActions {
                 return default;
             }
             for (int i = 0; i < parameters.Length - 1; i++) {
-                //var type1 = parameters[i + 1].ParameterType.GetType();
-                //var type2 = args[i].GetType();
-
-                if (parameters[i + 1].ParameterType.GetType() != args[i].GetType()) {
+                if (parameters[i + 1].ParameterType != args[i].GetType()) {
                     KLogger.Log.Error("This action requires parameters of type: " + string.Join(", ", parameters.Select(p => $"{p.Name}: {p.ParameterType.Name}").ToArray()));
                     return default;
                 }
