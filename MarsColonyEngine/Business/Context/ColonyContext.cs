@@ -105,9 +105,9 @@ namespace MarsColonyEngine.Context {
 
         public static void InitNewContext () {
             ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.BuildRescueCapsule_Static_User_Paramless, null);
-            ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.SpawnColonizer_Static_Simulation_Args, null, typeof(Engineer));
-            ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.SpawnColonizer_Static_Simulation_Args, null, typeof(Scientist));
-            ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.SpawnColonizer_Static_Simulation_Args, null, typeof(Explorer));
+            ColonizerSpawner.SpawnEngineer();
+            ColonizerSpawner.SpawnExplorer();
+            ColonizerSpawner.SpawnScientist();
             ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.NextTurn_Static_User_Paramless, null);
         }
 
