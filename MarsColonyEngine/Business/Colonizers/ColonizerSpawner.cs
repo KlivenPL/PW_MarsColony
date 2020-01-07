@@ -53,7 +53,7 @@ namespace MarsColonyEngine.Colonizers {
             if (spawnedColonizer == null)
                 res = "Invalid Colonizer class was given.";
 
-            Simulation.Simulator.Current.NextTurn();
+            ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.NextTurn_Static_User_Paramless, null);
             return spawnedColonizer;
         }
     }
