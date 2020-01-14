@@ -10,7 +10,8 @@ namespace MarsColonyEngine.Business.Structures {
         ArmoredBedroom,
         AluminiumMine,
         OxygenGenerator,
-        ResearchStation
+        ResearchStation,
+        RepairStation
     }
     public static class StructuresBuilder {
         public static Structure RescueCapsule () {
@@ -90,6 +91,15 @@ namespace MarsColonyEngine.Business.Structures {
                 );
         }
 
-
+        public static Structure RepairStation () {
+            return new Structure(
+                structureEnum: AvailableStructures.RepairStation,
+                baseColonizerStatsAffect: default,
+                deltaDayColonizerStatsAffect: default,
+                baseColonyStatsAffect: default,
+                deltaDayColonyStatsAffect: default,
+                stats: new StructureStats(50, 50, 100)
+                );
+        }
     }
 }

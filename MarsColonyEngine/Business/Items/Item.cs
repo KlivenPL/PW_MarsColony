@@ -56,6 +56,9 @@ namespace MarsColonyEngine.Business.Items {
         UnexaminedSample,
         AluminiumOreMap,
         ArmoredBedroomBlueprint,
+        PotatoSeed,
+        RepairStationBlueprint,
+        RepairStation
 
     }
 }

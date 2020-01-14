@@ -30,13 +30,13 @@ namespace MarsColonyEngine.Colonizers {
         [ActionProcedure(AvailableActions.Explore_Handler_User_Paramless, typeof(Explorer))]
         private Item ExploreProcedure (ref string res) {
             Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 0, -100, 0, 0, 0));
-            var foundSomething = KRandom.Bool(40);
+            var foundSomething = KRandom.Bool(50);
             if (foundSomething == false) {
                 res = $"Explorer {Name} did not find anything.";
                 return null;
             }
 
-            if (KRandom.Bool(40)) {
+            if (KRandom.Bool(50)) {
                 res = $"Explorer {Name} has found an Unexamined Sample. Research it in Scientist Station.";
                 return new Item(AvailableItems.UnexaminedSample, 1);
             }

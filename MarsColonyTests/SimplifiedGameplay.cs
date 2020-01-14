@@ -209,11 +209,14 @@ namespace MarsColonyTests {
                 case AvailableActions.BuildStructureOxygenGenerator_Handler_User_Paramless:
                     ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildStructureOxygenGenerator_Handler_User_Paramless, (Engineer)handler);
                     break;
-                case AvailableActions.BuildResearchStation_Handler_User_Paramless:
-                    ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildResearchStation_Handler_User_Paramless, (Engineer)handler);
+                case AvailableActions.BuildStructureResearchStation_Handler_User_Paramless:
+                    ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildStructureResearchStation_Handler_User_Paramless, (Engineer)handler);
                     break;
-                case AvailableActions.BuildArmoredBedroom_Handler_User_Paramless:
-                    ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildArmoredBedroom_Handler_User_Paramless, (Engineer)handler);
+                case AvailableActions.BuildStructureArmoredBedroom_Handler_User_Paramless:
+                    ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildStructureArmoredBedroom_Handler_User_Paramless, (Engineer)handler);
+                    break;
+                case AvailableActions.BuildStructureRepairStation_Handler_User_Paramless:
+                    ColonyActions.ExecuteAction<Engineer>(AvailableActions.BuildStructureRepairStation_Handler_User_Paramless, (Engineer)handler);
                     break;
                 case AvailableActions.RepairStructure_Handler_User_Args:
                     var structuresToRepair = ColonyContext.Current.Structures.Where(e => e.Stats.HP != e.Stats.MaxHP).ToArray();

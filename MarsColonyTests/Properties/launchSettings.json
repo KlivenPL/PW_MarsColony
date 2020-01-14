@@ -2,7 +2,7 @@
   "profiles": {
     "MarsColonyTests": {
       "commandName": "Project",
-      "commandLineArgs": "C:/users/oskar/desktop/testsave.json"
+      "commandLineArgs": "C:/users/oskar/desktop/testsave.jsonsd"
     }
   }
 }

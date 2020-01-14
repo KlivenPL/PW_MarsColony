@@ -20,9 +20,10 @@ namespace MarsColonyEngine.Colonizers {
                 AvailableActions.BuildStructurePotatoFarm_Handler_User_Paramless,
                 AvailableActions.BuildStructureAluminiumMine_Handler_User_Paramless,
                 AvailableActions.BuildStructureOxygenGenerator_Handler_User_Paramless,
-                AvailableActions.BuildResearchStation_Handler_User_Paramless,
+                AvailableActions.BuildStructureResearchStation_Handler_User_Paramless,
                 AvailableActions.RepairStructure_Handler_User_Args,
-                AvailableActions.BuildArmoredBedroom_Handler_User_Paramless,
+                AvailableActions.BuildStructureArmoredBedroom_Handler_User_Paramless,
+                AvailableActions.BuildStructureRepairStation_Handler_User_Paramless,
             }).ToArray();
         }
 
@@ -41,7 +42,7 @@ namespace MarsColonyEngine.Colonizers {
 
         [ActionRequirement(AvailableActions.BuildStructurePotatoFarm_Handler_User_Paramless)]
         private bool BuildStructurePotatoFarmRequirement (ref string res) {
-            return IsAlive && this.Stats.Efficiency >= 100f && ColonyContext.Current.Turn.CountItems(AvailableItems.Aluminium) > 25;
+            return IsAlive && this.Stats.Efficiency >= 100f && ColonyContext.Current.Turn.CountItems(AvailableItems.Aluminium) >= 25 && ColonyContext.Current.Turn.CountItems(AvailableItems.PotatoSeed) >= 5;
         }
 
         [ActionProcedure(AvailableActions.BuildStructurePotatoFarm_Handler_User_Paramless, typeof(Engineer))]
@@ -49,6 +50,7 @@ namespace MarsColonyEngine.Colonizers {
             Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 0, -Stats.Efficiency, 0, 0, 0));
             res = $"Engineer {Name} has built Potato Farm.";
             new Item(AvailableItems.Aluminium, -25);
+            new Item(AvailableItems.PotatoSeed, -5);
             return StructuresBuilder.PotatoFarm();
         }
 
@@ -78,13 +80,13 @@ namespace MarsColonyEngine.Colonizers {
             return StructuresBuilder.OxygenGenerator();
         }
 
-        [ActionRequirement(AvailableActions.BuildResearchStation_Handler_User_Paramless)]
+        [ActionRequirement(AvailableActions.BuildStructureResearchStation_Handler_User_Paramless)]
         private bool BuildResearchStationRequirement (ref string res) {
             return IsAlive && this.Stats.Efficiency >= 100f && ColonyContext.Current.Turn.CountItems(AvailableItems.Aluminium) >= 10
                 && ColonyContext.Current.Structures.Any(e => e.StructureEnum == AvailableStructures.ResearchStation) == false;
         }
 
-        [ActionProcedure(AvailableActions.BuildResearchStation_Handler_User_Paramless, typeof(Engineer))]
+        [ActionProcedure(AvailableActions.BuildStructureResearchStation_Handler_User_Paramless, typeof(Engineer))]
         private Structure BuildResearchStationProcedure (ref string res) {
             Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 0, -Stats.Efficiency, 0, 0, 0));
             res = $"Engineer {Name} has built ResearchStation.";
@@ -94,31 +96,60 @@ namespace MarsColonyEngine.Colonizers {
             return researchStation;
         }
 
-        [ActionRequirement(AvailableActions.BuildArmoredBedroom_Handler_User_Paramless)]
+        [ActionRequirement(AvailableActions.BuildStructureArmoredBedroom_Handler_User_Paramless)]
         private bool BuildArmoredBedroomRequirement (ref string res) {
             return IsAlive && this.Stats.Efficiency >= 100f && ColonyContext.Current.Turn.CountItems(AvailableItems.Aluminium) >= 75
                 && ColonyContext.Current.Turn.CountItems(AvailableItems.ArmoredBedroomBlueprint) > 0;
         }
 
-        [ActionProcedure(AvailableActions.BuildArmoredBedroom_Handler_User_Paramless, typeof(Engineer))]
+        [ActionProcedure(AvailableActions.BuildStructureArmoredBedroom_Handler_User_Paramless, typeof(Engineer))]
         private Structure BuildArmoredBedroomProcedure (ref string res) {
             Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 0, -Stats.Efficiency, 0, 0, 0));
             res = $"Engineer {Name} has built Armored Bedroom.";
             new Item(AvailableItems.Aluminium, -75);
             new Item(AvailableItems.ArmoredBedroomBlueprint, -1);
-            var researchStation = StructuresBuilder.ArmoredBedroom();
-            return researchStation;
+            var armoredBedroom = StructuresBuilder.ArmoredBedroom();
+            return armoredBedroom;
+        }
+
+        [ActionRequirement(AvailableActions.BuildStructureRepairStation_Handler_User_Paramless)]
+        private bool BuildRepairStationRequirement (ref string res) {
+            return IsAlive && this.Stats.Efficiency >= 100f && ColonyContext.Current.Turn.CountItems(AvailableItems.Aluminium) >= 50
+                && ColonyContext.Current.Turn.CountItems(AvailableItems.RepairStationBlueprint) > 0
+                && ColonyContext.Current.Structures.Any(e => e.StructureEnum == AvailableStructures.RepairStation) == false;
+        }
+
+        [ActionProcedure(AvailableActions.BuildStructureRepairStation_Handler_User_Paramless, typeof(Engineer))]
+        private Structure BuildRepairStationProcedure (ref string res) {
+            Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 0, -Stats.Efficiency, 0, 0, 0));
+            res = $"Engineer {Name} has built Repair Station";
+            new Item(AvailableItems.Aluminium, -50);
+            new Item(AvailableItems.RepairStationBlueprint, -1);
+            var repairStation = StructuresBuilder.RepairStation();
+            Simulation.Simulator.Current.NextTurn();
+            return repairStation;
         }
 
         [ActionRequirement(AvailableActions.RepairStructure_Handler_User_Args)]
         private bool RepairStructureRequirement (ref string res) {
-            return IsAlive && this.Stats.Efficiency >= 100f && ColonyContext.Current.Turn.CountItems(AvailableItems.Aluminium) > 20
+            if (ColonyContext.Current.Structures.Any(e => e.StructureEnum == AvailableStructures.RepairStation)) {
+                if (this.Stats.Efficiency < 50f)
+                    return false;
+            } else {
+                if (this.Stats.Efficiency < 100f)
+                    return false;
+            }
+            return IsAlive && ColonyContext.Current.Turn.CountItems(AvailableItems.Aluminium) > 20
                 && ColonyContext.Current.Structures.Any() && ColonyContext.Current.Structures.Any(e => e.Stats.HP != e.Stats.MaxHP);
         }
 
         [ActionProcedure(AvailableActions.RepairStructure_Handler_User_Args, typeof(Engineer))]
         private void RepairStructureProcedure (ref string res, Structure structure) {
-            Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 0, -Stats.Efficiency, 0, 0, 0));
+            if (ColonyContext.Current.Structures.Any(e => e.StructureEnum == AvailableStructures.RepairStation)) {
+                Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 0, -50f, 0, 0, 0));
+            } else {
+                Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 0, -Stats.Efficiency, 0, 0, 0));
+            }
             var cost = (int)(20f * (1 - structure.Stats.HP / structure.Stats.MaxHP));
             res = $"Engineer {Name} has repaired {structure.Name}. It took {cost}x Aluminium.";
             new Item(AvailableItems.Aluminium, -cost);

@@ -109,6 +109,7 @@ namespace MarsColonyEngine.Context {
             ColonizerSpawner.SpawnExplorer();
             ColonizerSpawner.SpawnScientist();
             ColonyActions.ColonyActions.ExecuteAction<World.World>(AvailableActions.NextTurn_Static_User_Paramless, null);
+            new Item(AvailableItems.PotatoSeed, 5);
         }
 
         public void Unload () {

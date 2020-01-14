@@ -3,6 +3,7 @@ using MarsColonyEngine.Business.Colonizers;
 using MarsColonyEngine.Business.Items;
 using MarsColonyEngine.Business.Simulation;
 using MarsColonyEngine.Business.Stats;
+using MarsColonyEngine.Helpers;
 using MarsColonyEngine.Logger;
 using MarsColonyEngine.Technical;
 using MarsColonyEngine.Technical.Misc;
@@ -69,6 +70,10 @@ namespace MarsColonyEngine.Business.Structures {
             switch (StructureEnum) {
                 case AvailableStructures.AluminiumMine:
                     new Item(AvailableItems.Aluminium, (int)(5 * (Stats.Efficiency / 100f)));
+                    break;
+                case AvailableStructures.PotatoFarm:
+                    if (KRandom.Bool(30) && Stats.Efficiency > 0)
+                        new Item(AvailableItems.PotatoSeed, 1);
                     break;
                 default:
                     break;

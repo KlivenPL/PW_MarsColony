@@ -35,7 +35,7 @@ namespace MarsColonyEngine.Colonizers {
             Stats = (ColonizerStats)Stats.Add(new ColonizerStats(0, 0, -100, 0, 0, 0));
             new Item(AvailableItems.UnexaminedSample, -1);
 
-            var foundSomething = KRandom.Bool(40);
+            var foundSomething = KRandom.Bool(45);
             if (foundSomething == false) {
                 res = $"Scientist {Name} did not discover anything.";
                 return null;
