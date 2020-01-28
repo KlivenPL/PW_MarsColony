@@ -58,7 +58,5 @@ namespace MarsColonyEngine.Business.Items {
         ArmoredBedroomBlueprint,
         PotatoSeed,
         RepairStationBlueprint,
-        RepairStation
-
     }
 }
